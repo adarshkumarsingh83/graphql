@@ -1,0 +1,19 @@
+
+
+scalar Date
+scalar JSON
+
+enum Gender{
+    MALE
+    FEMALE
+}
+
+type Employee{
+    id: ID!
+    name: String
+    dob: Date
+    gender: Gender
+}
+
+
+

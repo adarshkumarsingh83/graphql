@@ -1,0 +1,8 @@
+
+type Query{
+    message(name: String): String!
+    data(name: String): JSON!
+    employee(id: Int): Employee
+    employees: [Employee]
+}
+
