@@ -3,6 +3,7 @@ package com.espark.adarsh.service;
 
 import com.espark.adarsh.bean.EmployeeBean;
 import com.espark.adarsh.entity.Employee;
+import com.espark.adarsh.exception.GraphqlException;
 import com.espark.adarsh.filter.EmployeeFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,6 +38,14 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
+        List<GraphQLError> errors = executionResult.getErrors();
+
+        if (errors != null && !errors.isEmpty()) {
+            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+            log.error("GraphqlService getAllEmployee {}", error);
+            throw new GraphqlException(error);
+        }
+
         List<Employee> employees = new ArrayList<>();
         if (!linkedHashMap.isEmpty()) {
             try {
@@ -62,6 +72,14 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
+        List<GraphQLError> errors = executionResult.getErrors();
+
+        if (errors != null && !errors.isEmpty()) {
+            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+            log.error("GraphqlService getEmployee {}", error);
+            throw new GraphqlException(error);
+        }
+
         Employee employee = null;
         try {
             if (!linkedHashMap.isEmpty()) {
@@ -88,6 +106,15 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
+        List<GraphQLError> errors = executionResult.getErrors();
+
+        if (errors != null && !errors.isEmpty()) {
+            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+            log.error("GraphqlService employeesFilter {}", error);
+            throw new GraphqlException(error);
+        }
+
+
         Iterable<Employee> employees = new ArrayList<>();
         if (!linkedHashMap.isEmpty()) {
             try {
@@ -113,20 +140,23 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
-        Employee employee=null;
+
+        List<GraphQLError> errors = executionResult.getErrors();
+
+        if (errors != null && !errors.isEmpty()) {
+            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+            log.error("GraphqlService saveEmployee {}", error);
+            throw new GraphqlException(error);
+        }
+
+        Employee employee = null;
         try {
-            if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
+            if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("saveEmployee"));
                 employee = objectMapper.readValue(data, Employee.class);
             }
             log.info("Graphql Response {}", employee);
 
-            List<GraphQLError> errors = executionResult.getErrors();
-            if(!errors.isEmpty()){
-                errors.forEach(error->{
-                    log.error(error.getMessage());
-                });
-            }
         } catch (JsonProcessingException jsonProcessingException) {
             log.error(jsonProcessingException.getMessage());
         }
@@ -145,20 +175,23 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
+
+        List<GraphQLError> errors = executionResult.getErrors();
+
+        if (errors != null && !errors.isEmpty()) {
+            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+            log.error("GraphqlService removeEmployee {}", error);
+            throw new GraphqlException(error);
+        }
+
         Employee employee = null;
         try {
-            if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
+            if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("removeEmployee"));
                 employee = objectMapper.readValue(data, Employee.class);
             }
             log.info("Graphql Response {}", employee);
 
-            List<GraphQLError> errors = executionResult.getErrors();
-            if(!errors.isEmpty()){
-                errors.forEach(error->{
-                    log.error(error.getMessage());
-                });
-            }
         } catch (JsonProcessingException jsonProcessingException) {
             log.error(jsonProcessingException.getMessage());
         }
@@ -179,20 +212,23 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
+
+        List<GraphQLError> errors = executionResult.getErrors();
+
+        if (errors != null && !errors.isEmpty()) {
+            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+            log.error("GraphqlService updateEmployee {}", error);
+            throw new GraphqlException(error);
+        }
+
         Employee employee = null;
         try {
-            if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
+            if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("updateEmployee"));
                 employee = objectMapper.readValue(data, Employee.class);
             }
             log.info("Graphql Response {}", employee);
 
-            List<GraphQLError> errors = executionResult.getErrors();
-            if(!errors.isEmpty()){
-                errors.forEach(error->{
-                    log.error(error.getMessage());
-                });
-            }
         } catch (JsonProcessingException jsonProcessingException) {
             log.error(jsonProcessingException.getMessage());
         }
