@@ -29,12 +29,12 @@ public class EmployeeService {
         return employeeList;
     }
 
-    public Employee getEmployee(Long id) {
+    public Employee getEmployee(Long id) throws EmployeeNotFoundException{
         return this.employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("employee not found", id));
     }
 
-    public Employee removeEmployee(Long id) {
+    public Employee removeEmployee(Long id) throws EmployeeNotFoundException{
         Employee employee = this.employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("employee not found", id));
         this.employeeRepository.deleteById(id);
@@ -50,7 +50,7 @@ public class EmployeeService {
     }
 
 
-    public Employee updatePartialEmployee(@PathVariable("id") Long id, Map<String, Object> employee) {
+    public Employee updatePartialEmployee(@PathVariable("id") Long id, Map<String, Object> employee) throws EmployeeNotFoundException{
         final Optional<Employee> employeeOptional = this.employeeRepository.findById(id);
         if (employeeOptional.isPresent()) {
             employee.forEach((key, value) -> {

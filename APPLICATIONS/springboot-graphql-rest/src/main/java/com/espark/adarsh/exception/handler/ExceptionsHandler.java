@@ -1,5 +1,6 @@
-package com.espark.adarsh.exception;
+package com.espark.adarsh.exception.handler;
 
+import com.espark.adarsh.exception.GraphqlException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 

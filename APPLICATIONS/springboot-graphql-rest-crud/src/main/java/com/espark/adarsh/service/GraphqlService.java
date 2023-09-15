@@ -2,6 +2,7 @@ package com.espark.adarsh.service;
 
 
 import com.espark.adarsh.bean.EmployeeBean;
+import com.espark.adarsh.bean.ResponseBean;
 import com.espark.adarsh.entity.Employee;
 import com.espark.adarsh.exception.GraphqlException;
 import com.espark.adarsh.filter.EmployeeFilter;
@@ -16,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,18 +30,20 @@ public class GraphqlService {
     @Autowired
     ObjectMapper objectMapper;
 
-    public List<Employee> getAllEmployee(String query) {
+    public ResponseBean<List<Employee>> getAllEmployee(String query) {
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query("{" + query + "}")
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
         List<GraphQLError> errors = executionResult.getErrors();
+        List<String> errorsList = new LinkedList();
 
         if (errors != null && !errors.isEmpty()) {
-            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
-            log.error("GraphqlService getAllEmployee {}", error);
-            throw new GraphqlException(error);
+            errorsList = errors.stream()
+                    .map(e -> e.getMessage())
+                    .collect(Collectors.toList());
+            log.error("GraphqlService getAllEmployee {}", errorsList);
         }
 
         List<Employee> employees = new ArrayList<>();
@@ -55,15 +55,25 @@ public class GraphqlService {
                 log.info("Graphql Response {}", employees);
             } catch (JsonProcessingException jsonProcessingException) {
                 log.error(jsonProcessingException.getMessage());
+                errorsList.add(jsonProcessingException.getMessage());
             }
         }
-        return employees;
+        return ResponseBean.<List<Employee>>builder()
+                .data(employees)
+                .errors(errorsList)
+                .build();
+
     }
 
 
-    public Employee getEmployee(String query, Long id) {
+    public ResponseBean<Employee> getEmployee(String query, Long id) {
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query("{" + query + "}")
+                .variables(new HashMap<>() {
+                    {
+                        put("var", id);
+                    }
+                })
                 .graphQLContext(new HashMap<>() {
                     {
                         put("id", id);
@@ -73,11 +83,13 @@ public class GraphqlService {
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
         List<GraphQLError> errors = executionResult.getErrors();
+        List<String> errorsList = new LinkedList();
 
         if (errors != null && !errors.isEmpty()) {
-            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
-            log.error("GraphqlService getEmployee {}", error);
-            throw new GraphqlException(error);
+            errorsList = errors.stream()
+                    .map(e -> e.getMessage())
+                    .collect(Collectors.toList());
+            log.error("GraphqlService getAllEmployee {}", errorsList);
         }
 
         Employee employee = null;
@@ -90,12 +102,16 @@ public class GraphqlService {
 
         } catch (JsonProcessingException jsonProcessingException) {
             log.error(jsonProcessingException.getMessage());
+            errorsList.add(jsonProcessingException.getMessage());
         }
-        return employee;
+        return ResponseBean.<Employee>builder()
+                .data(employee)
+                .errors(errorsList)
+                .build();
     }
 
 
-    public Iterable<Employee> employeesFilter(String query, EmployeeFilter filter) {
+    public ResponseBean<Iterable<Employee>> employeesFilter(String query, EmployeeFilter filter) {
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query("{" + query + "}")
                 .graphQLContext(new HashMap<>() {
@@ -107,11 +123,12 @@ public class GraphqlService {
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
         List<GraphQLError> errors = executionResult.getErrors();
-
+        List<String> errorsList = new LinkedList();
         if (errors != null && !errors.isEmpty()) {
-            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
-            log.error("GraphqlService employeesFilter {}", error);
-            throw new GraphqlException(error);
+            errorsList = errors.stream()
+                    .map(e -> e.getMessage())
+                    .collect(Collectors.toList());
+            log.error("GraphqlService getAllEmployee {}", errorsList);
         }
 
 
@@ -124,12 +141,16 @@ public class GraphqlService {
                 log.info("Graphql Response {}", employees);
             } catch (JsonProcessingException jsonProcessingException) {
                 log.error(jsonProcessingException.getMessage());
+                errorsList.add(jsonProcessingException.getMessage());
             }
         }
-        return employees;
+        return ResponseBean.<Iterable<Employee>>builder()
+                .data(employees)
+                .errors(errorsList)
+                .build();
     }
 
-    public Employee saveEmployee(String query, final EmployeeBean employeeBean) {
+    public ResponseBean<Employee> saveEmployee(String query, final EmployeeBean employeeBean) {
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query("{" + query + "}")
                 .graphQLContext(new HashMap<>() {
@@ -140,13 +161,14 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
-
         List<GraphQLError> errors = executionResult.getErrors();
+        List<String> errorsList = new LinkedList<>();
 
         if (errors != null && !errors.isEmpty()) {
-            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
-            log.error("GraphqlService saveEmployee {}", error);
-            throw new GraphqlException(error);
+            errorsList = errors.stream()
+                    .map(e -> e.getMessage())
+                    .collect(Collectors.toList());
+            log.error("GraphqlService getAllEmployee {}", errorsList);
         }
 
         Employee employee = null;
@@ -159,11 +181,15 @@ public class GraphqlService {
 
         } catch (JsonProcessingException jsonProcessingException) {
             log.error(jsonProcessingException.getMessage());
+            errorsList.add(jsonProcessingException.getMessage());
         }
-        return employee;
+        return ResponseBean.<Employee>builder()
+                .data(employee)
+                .errors(errorsList)
+                .build();
     }
 
-    public Employee removeEmployee(String query, Long id) {
+    public ResponseBean<Employee> removeEmployee(String query, Long id) {
 
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query("{" + query + "}")
@@ -175,13 +201,14 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
-
+        List<String> errorsList = new LinkedList<>();
         List<GraphQLError> errors = executionResult.getErrors();
 
         if (errors != null && !errors.isEmpty()) {
-            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
-            log.error("GraphqlService removeEmployee {}", error);
-            throw new GraphqlException(error);
+            errorsList = errors.stream()
+                    .map(e -> e.getMessage())
+                    .collect(Collectors.toList());
+            log.error("GraphqlService getAllEmployee {}", errorsList);
         }
 
         Employee employee = null;
@@ -194,13 +221,17 @@ public class GraphqlService {
 
         } catch (JsonProcessingException jsonProcessingException) {
             log.error(jsonProcessingException.getMessage());
+            errorsList.add(jsonProcessingException.getMessage());
         }
-        return employee;
+        return ResponseBean.<Employee>builder()
+                .data(employee)
+                .errors(errorsList)
+                .build();
     }
 
-    public Employee updateEmployee(String query, Long id, final EmployeeBean employeeBean) {
+    public ResponseBean<Employee> updateEmployee(String query, Long id, final EmployeeBean employeeBean) {
 
-
+        ResponseBean.ResponseBeanBuilder<Employee> builder = ResponseBean.<Employee>builder();
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query("{" + query + "}")
                 .graphQLContext(new HashMap<>() {
@@ -212,13 +243,14 @@ public class GraphqlService {
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
-
         List<GraphQLError> errors = executionResult.getErrors();
+        List<String> errorsList = new LinkedList<>();
 
         if (errors != null && !errors.isEmpty()) {
-            String error = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
-            log.error("GraphqlService updateEmployee {}", error);
-            throw new GraphqlException(error);
+            errorsList = errors.stream()
+                    .map(e -> e.getMessage())
+                    .collect(Collectors.toList());
+            log.error("GraphqlService getAllEmployee {}", errorsList);
         }
 
         Employee employee = null;
@@ -231,8 +263,13 @@ public class GraphqlService {
 
         } catch (JsonProcessingException jsonProcessingException) {
             log.error(jsonProcessingException.getMessage());
+            errorsList.add(jsonProcessingException.getMessage());
         }
-        return employee;
+
+        return builder
+                .data(employee)
+                .errors(errorsList)
+                .build();
     }
 
 }

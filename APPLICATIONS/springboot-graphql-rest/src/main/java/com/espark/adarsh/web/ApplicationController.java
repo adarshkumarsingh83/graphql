@@ -2,6 +2,7 @@ package com.espark.adarsh.web;
 
 import com.espark.adarsh.bean.Employee;
 import com.espark.adarsh.service.GraphQLService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class ApplicationController {
 
 
     @GetMapping("/data/{name}")
-    public Map<String,Object> getData(@PathVariable("name") String name) {
+    public Map<String,Object> getData(@PathVariable("name") String name) throws JsonProcessingException {
         return graphQLService.getData("data", name);
     }
 

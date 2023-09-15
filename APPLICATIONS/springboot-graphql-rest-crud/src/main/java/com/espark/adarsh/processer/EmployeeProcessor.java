@@ -2,14 +2,17 @@ package com.espark.adarsh.processer;
 
 import com.espark.adarsh.bean.EmployeeBean;
 import com.espark.adarsh.entity.Employee;
+import com.espark.adarsh.exception.EmployeeNotFoundException;
 import com.espark.adarsh.filter.EmployeeFilter;
 import com.espark.adarsh.service.EmployeeService;
+import graphql.execution.DataFetcherResult;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class EmployeeProcessor {
@@ -27,53 +30,93 @@ public class EmployeeProcessor {
         };
     }
 
-    public DataFetcher<Employee> getEmployee() {
-        return new DataFetcher<Employee>() {
+    public DataFetcher<Employee> getEmployee() throws EmployeeNotFoundException {
+        return new DataFetcher() {
             @Override
-            public Employee get(DataFetchingEnvironment environment) {
+            public Object get(DataFetchingEnvironment environment) {
                 Long id = environment.getGraphQlContext().get("id");
-                return employeeService.getEmployee(id);
+                Employee employee = null;
+                DataFetcherResult dataFetcherResult = null;
+                try {
+                    employee = employeeService.getEmployee(id);
+                    dataFetcherResult = new DataFetcherResult(employee, List.of());
+                } catch (EmployeeNotFoundException enf) {
+                    dataFetcherResult = new DataFetcherResult(employee, List.of(enf));
+                }
+                return dataFetcherResult;
             }
         };
     }
 
-    public DataFetcher<Employee> removeEmployee() {
-        return new DataFetcher<Employee>() {
+    public DataFetcher<Employee> removeEmployee() throws EmployeeNotFoundException {
+        return new DataFetcher() {
             @Override
-            public Employee get(DataFetchingEnvironment environment) {
+            public Object get(DataFetchingEnvironment environment) {
                 Long id = environment.getGraphQlContext().get("id");
-                return employeeService.removeEmployee(id);
+                Employee employee = null;
+                DataFetcherResult dataFetcherResult = null;
+                try {
+                    employee = employeeService.removeEmployee(id);
+                    dataFetcherResult = new DataFetcherResult(employee, List.of());
+                } catch (EmployeeNotFoundException enf) {
+                    dataFetcherResult = new DataFetcherResult(employee, List.of(enf));
+                }
+                return dataFetcherResult;
             }
         };
     }
 
 
     public DataFetcher<Employee> saveEmployee() {
-        return new DataFetcher<Employee>() {
+        return new DataFetcher() {
             @Override
-            public Employee get(DataFetchingEnvironment environment) {
-                EmployeeBean employeeBean = environment.getGraphQlContext().get("employeeBean");
-                return employeeService.saveEmployee(employeeBean.getEmployee());
+            public Object get(DataFetchingEnvironment environment) {
+                Employee employee = null;
+                DataFetcherResult dataFetcherResult = null;
+                try {
+                    EmployeeBean employeeBean = environment.getGraphQlContext().get("employeeBean");
+                    employee = employeeService.saveEmployee(employeeBean.getEmployee());
+                    dataFetcherResult = new DataFetcherResult(employee, List.of());
+                } catch (Exception e) {
+                    dataFetcherResult = new DataFetcherResult(employee, List.of(e));
+                }
+                return dataFetcherResult;
             }
         };
     }
 
-    public DataFetcher<Employee> updateEmployee() {
-        return new DataFetcher<Employee>() {
+    public DataFetcher<Employee> updateEmployee() throws EmployeeNotFoundException {
+        return new DataFetcher() {
             @Override
-            public Employee get(DataFetchingEnvironment environment) {
-                EmployeeBean employeeBean = environment.getGraphQlContext().get("employeeBean");
-                return employeeService.updateEmployee(employeeBean.getId(), employeeBean.getEmployee());
+            public Object get(DataFetchingEnvironment environment) {
+                Employee employee = null;
+                DataFetcherResult dataFetcherResult = null;
+                try {
+                    EmployeeBean employeeBean = environment.getGraphQlContext().get("employeeBean");
+                    employee = employeeService.updateEmployee(employeeBean.getId(), employeeBean.getEmployee());
+                    dataFetcherResult = new DataFetcherResult(employee, List.of());
+                } catch (Exception e) {
+                    dataFetcherResult = new DataFetcherResult(employee, List.of(e));
+                }
+                return dataFetcherResult;
             }
         };
     }
 
-    public DataFetcher<Iterable<Employee>> employeesFilter() {
-        return new DataFetcher<Iterable<Employee>>() {
+    public DataFetcher<Iterable<Employee>> employeesFilter() throws EmployeeNotFoundException {
+        return new DataFetcher() {
             @Override
-            public Iterable<Employee> get(DataFetchingEnvironment environment) {
-                EmployeeFilter filter = environment.getGraphQlContext().get("filter");
-                return employeeService.employeesFilter(filter);
+            public Object get(DataFetchingEnvironment environment) {
+                Iterable<Employee> iterable = null;
+                DataFetcherResult dataFetcherResult = null;
+                try {
+                    EmployeeFilter filter = environment.getGraphQlContext().get("filter");
+                    iterable = employeeService.employeesFilter(filter);
+                    dataFetcherResult = new DataFetcherResult(iterable, List.of());
+                } catch (Exception e) {
+                    dataFetcherResult = new DataFetcherResult(iterable, List.of(e));
+                }
+                return dataFetcherResult;
             }
         };
     }
