@@ -74,32 +74,32 @@
           ``` 
       - response 
         ```
-    {
-        "data": [
             {
-                "id": 1,
-                "firstName": "adarsh",
-                "lastName": "kumar",
-                "doj": "2020-01-01",
-                "gender": "MALE"
-            },
-            {
-                "id": 2,
-                "firstName": "radha",
-                "lastName": "singh",
-                "doj": "2020-01-01",
-                "gender": "FEMALE"
-            },
-            {
-                "id": 4,
-                "firstName": "amit",
-                "lastName": "kumar",
-                "doj": "2020-01-01",
-                "gender": "MALE"
+                "data": [
+                    {
+                        "id": 1,
+                        "firstName": "adarsh",
+                        "lastName": "kumar",
+                        "doj": "2020-01-01",
+                        "gender": "MALE"
+                    },
+                    {
+                        "id": 2,
+                        "firstName": "radha",
+                        "lastName": "singh",
+                        "doj": "2020-01-01",
+                        "gender": "FEMALE"
+                    },
+                    {
+                        "id": 4,
+                        "firstName": "amit",
+                        "lastName": "kumar",
+                        "doj": "2020-01-01",
+                        "gender": "MALE"
+                    }
+                ],
+                "errors": []
             }
-        ],
-        "errors": []
-    }
         ```
         
   - To save data 
