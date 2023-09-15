@@ -127,11 +127,11 @@
         - http://localhost:8080/employee
         - put call
         - request body
-          ```
+    ```
            { "id":10,"firstName":"sonu","lastName":"kumar singh","career":"it", "salary": 3,  "doj": "2020-01-01", "gender": "MALE"}
-          ```
+    ```
           - response body
-            ```
+     ```
              {
               "data": {
               "id": 10,
@@ -142,4 +142,4 @@
               },
               "errors": []
              }
-          ```
+     ```
