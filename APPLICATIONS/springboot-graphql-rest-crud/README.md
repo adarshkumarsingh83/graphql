@@ -7,36 +7,37 @@
     - http://localhost:8080/employees
 ```   
 {
-  "data": [
-    {
-      "id": 1,
-      "firstName": "adarsh",
-      "lastName": "kumar",
-      "doj": "2020-01-01",
-      "gender": "MALE"
-    },
-    {
-      "id": 2,
-      "firstName": "radha",
-      "lastName": "singh",
-      "doj": "2020-01-01",
-      "gender": "FEMALE"
-    },
-    {
-      "id": 3,
-      "firstName": "sonu",
-      "lastName": "singh",
-      "doj": "2020-01-01",
-      "gender": "MALE"
-    },
-    {
-      "id": 4,
-      "firstName": "amit",
-      "lastName": "kumar",
-      "doj": "2020-01-01",
-      "gender": "MALE"
-    }
-  ]
+"data": [
+{
+"id": 1,
+"firstName": "adarsh",
+"lastName": "kumar",
+"doj": "2020-01-01",
+"gender": "MALE"
+},
+{
+"id": 2,
+"firstName": "radha",
+"lastName": "singh",
+"doj": "2020-01-01",
+"gender": "FEMALE"
+},
+{
+"id": 3,
+"firstName": "sonu",
+"lastName": "singh",
+"doj": "2020-01-01",
+"gender": "MALE"
+},
+{
+"id": 4,
+"firstName": "amit",
+"lastName": "kumar",
+"doj": "2020-01-01",
+"gender": "MALE"
+}
+],
+"errors": []
 }
 ```
 
@@ -44,11 +45,23 @@
     - http://localhost:8080/employee/1
 ```   
 {
-  "id": 1,
-  "firstName": "adarsh",
-  "lastName": "kumar",
-  "doj": "2020-01-01",
-  "gender": "MALE"
+  "data": {
+    "id": 1,
+    "firstName": "adarsh",
+    "lastName": "kumar",
+    "doj": "2020-01-01",
+    "gender": "MALE"
+  },
+  "errors": [    
+  ]
+}
+```
+  - http://localhost:8080/employee/100
+```
+{
+  "errors": [
+    "employee not found"
+  ]
 }
 ```
 
@@ -59,65 +72,74 @@
           ```
           {"id":null,"salary": { "operator" : "gt" ,"value": "5" },"carrier":null}
           ``` 
-    - response 
-      ```
-      [
-          {
-          "id": 1,
-          "firstName": "adarsh",
-          "lastName": "kumar",
-          "doj": "2020-01-01",
-          "gender": "MALE"
-          },
-          {
-          "id": 2,
-          "firstName": "radha",
-          "lastName": "singh",
-          "doj": "2020-01-01",
-          "gender": "FEMALE"
-          },
-          {
-          "id": 4,
-          "firstName": "amit",
-          "lastName": "kumar",
-          "doj": "2020-01-01",
-          "gender": "MALE"
-          }
-       ]
-      ```
-        
-- To save data 
-  - http://localhost:8080/employee
-  - post call 
-  - request body 
-    ```
-     { "id":10,"firstName":"sonu","lastName":"kumar","career":"it", "salary": 3,  "doj": "2020-01-01", "gender": "MALE"}
-    ```
-  - response body 
-    ```
+      - response 
+        ```
     {
-    "id": 10,
-    "firstName": "sonu",
-    "lastName": "kumar",
-    "doj": "2020-01-01",
-    "gender": "MALE"
-    }
-    ```
-
-  - To update data
-      - http://localhost:8080/employee
-      - put call
-      - request body
-        ```
-         { "id":10,"firstName":"sonu","lastName":"kumar singh","career":"it", "salary": 3,  "doj": "2020-01-01", "gender": "MALE"}
-        ```
-      - response body
-        ```
+        "data": [
             {
-          "id": 10,
-          "firstName": "sonu",
-          "lastName": "kumar singh ",
-          "doj": "2020-01-01",
-          "gender": "MALE"
-           }
+                "id": 1,
+                "firstName": "adarsh",
+                "lastName": "kumar",
+                "doj": "2020-01-01",
+                "gender": "MALE"
+            },
+            {
+                "id": 2,
+                "firstName": "radha",
+                "lastName": "singh",
+                "doj": "2020-01-01",
+                "gender": "FEMALE"
+            },
+            {
+                "id": 4,
+                "firstName": "amit",
+                "lastName": "kumar",
+                "doj": "2020-01-01",
+                "gender": "MALE"
+            }
+        ],
+        "errors": []
+    }
         ```
+        
+  - To save data 
+    - http://localhost:8080/employee
+    - post call 
+    - request body 
+      ```
+       { "id":10,"firstName":"sonu","lastName":"kumar","career":"it", "salary": 3,  "doj": "2020-01-01", "gender": "MALE"}
+      ```
+      - response body 
+        ```
+          {
+          "data": {
+                  "id": 10,
+                  "firstName": "sonu",
+                  "lastName": "kumar",
+                  "doj": "2020-01-01",
+                  "gender": "MALE"
+            },
+            "errors": []
+          }
+        ```
+
+    - To update data
+        - http://localhost:8080/employee
+        - put call
+        - request body
+          ```
+           { "id":10,"firstName":"sonu","lastName":"kumar singh","career":"it", "salary": 3,  "doj": "2020-01-01", "gender": "MALE"}
+          ```
+          - response body
+            ```
+             {
+              "data": {
+              "id": 10,
+              "firstName": "sonu",
+              "lastName": "kumar singh",
+              "doj": "2020-01-01",
+              "gender": "MALE"
+              },
+              "errors": []
+             }
+          ```
