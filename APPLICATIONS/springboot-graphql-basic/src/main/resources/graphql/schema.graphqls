@@ -1,0 +1,20 @@
+
+scalar  LocalDateTime
+
+type AcademicClass{
+    id: ID!
+    teacher: Teacher!
+    startAt: LocalDateTime!
+    endsAt: LocalDateTime!
+    difficulty: Difficulty!
+}
+
+enum Difficulty{
+    BEGINNER
+    ADVANCE
+}
+
+enum Teacher{
+   TEACHER1
+    TEACHER2
+}

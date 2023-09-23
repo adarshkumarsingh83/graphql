@@ -1,0 +1,4 @@
+
+type Query{
+    schedule(teacher: Teacher):[AcademicClass!]
+}
