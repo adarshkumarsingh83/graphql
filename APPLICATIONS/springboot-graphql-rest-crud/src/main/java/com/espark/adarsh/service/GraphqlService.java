@@ -47,7 +47,7 @@ public class GraphqlService {
         }
 
         List<Employee> employees = new ArrayList<>();
-        if (!linkedHashMap.isEmpty()) {
+        if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
             try {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("getAllEmployee"));
                 employees = objectMapper.readValue(data, new TypeReference<List<Employee>>() {
@@ -94,7 +94,7 @@ public class GraphqlService {
 
         Employee employee = null;
         try {
-            if (!linkedHashMap.isEmpty()) {
+            if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("getEmployee"));
                 employee = objectMapper.readValue(data, Employee.class);
             }
@@ -133,7 +133,7 @@ public class GraphqlService {
 
 
         Iterable<Employee> employees = new ArrayList<>();
-        if (!linkedHashMap.isEmpty()) {
+        if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
             try {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("employeesFilter"));
                 employees = objectMapper.readValue(data, new TypeReference<Iterable<Employee>>() {
