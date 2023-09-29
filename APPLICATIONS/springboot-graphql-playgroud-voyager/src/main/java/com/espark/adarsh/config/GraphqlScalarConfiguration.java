@@ -5,15 +5,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.language.StringValue;
-//import graphql.scalars.ExtendedScalars;
 import graphql.schema.Coercing;
 import graphql.schema.CoercingParseLiteralException;
 import graphql.schema.CoercingParseValueException;
 import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
+import graphql.schema.idl.RuntimeWiring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -22,16 +21,16 @@ import java.util.Map;
 @Configuration
 public class GraphqlScalarConfiguration {
 
+
     @Bean
-    public RuntimeWiringConfigurer runtimeWiringConfigurer() {
-        return wiringBuilder -> wiringBuilder
+    public RuntimeWiring runtimeWiring() {
+      return   RuntimeWiring.newRuntimeWiring()
                 .scalar(dateScalar())
-                .scalar(jsonScalar());
-                //.scalar(ExtendedScalars.Json)
-                //.scalar(ExtendedScalars.Date);
+                .scalar(jsonScalar())
+                .build();
     }
 
-
+    @Bean
     public GraphQLScalarType dateScalar() {
         return GraphQLScalarType.newScalar()
                 .name("Date") //graphql type define in the schema file
@@ -77,6 +76,7 @@ public class GraphqlScalarConfiguration {
     }
 
 
+    @Bean
     public GraphQLScalarType jsonScalar() {
         ObjectMapper objectMapper = new ObjectMapper();
         return GraphQLScalarType.newScalar()

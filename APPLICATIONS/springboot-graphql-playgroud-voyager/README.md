@@ -13,51 +13,97 @@
 ```
 username, pwd , dburl and db driver class is mentioned in application.properties file
 ```
+* voyager console
+* http://localhost:8080/espark/voyager
 
-## graphql scale lib 
+
+* playgroup console
+* http://localhost:8080/espark/playground
+* url for graphiql console 
+* http://localhost:8080/espark/graphiql
+
+* query
+### To get the Employee by Id  
 ```
-	<!--https://github.com/graphql-java/graphql-java-extended-scalars-->
-		<dependency>
-			<groupId>com.graphql-java</groupId>
-			<artifactId>graphql-java-extended-scalars</artifactId>
-			<version>20.2</version>
-		</dependency>
-```
-
-## Graphql console 
-* http://localhost:8080/espark/graphiql?path=/api/espark/graphql
-
-### single selection query 
-````
-query{
-  getEmployee(id:1){
-    id
-    firstName
-    lastName
-    salary
-     doj
-    gender
-    attributes
-    phone
+{
+  getEmployee(id:1 ){
+  id
+  firstName
+  lastName
+  salary
   }
 }
-````
-
-### multi selection query 
 ```
-query{
+* response 
+```
+{
+  "data": {
+    "getEmployee": {
+      "id": "1",
+      "firstName": "adarsh",
+      "lastName": "kumar",
+      "salary": 10
+    }
+  }
+}
+```
+
+### To get the All Employee
+```
+{
   getAllEmployee{
     id
     firstName
     lastName
     salary
-     doj
-    gender
+    career
     attributes
-    phone
+    
   }
 }
 ```
+* response 
+```
+{
+  "data": {
+    "getAllEmployee": [
+      {
+        "id": "1",
+        "firstName": "adarsh",
+        "lastName": "kumar",
+        "salary": 10,
+        "career": "It",
+        "attributes": "{\"key1\":\"value\"}"
+      },
+      {
+        "id": "2",
+        "firstName": "radha",
+        "lastName": "singh",
+        "salary": 10,
+        "career": "IT",
+        "attributes": "{\"key2\":\"value\"}"
+      },
+      {
+        "id": "3",
+        "firstName": "sonu",
+        "lastName": "singh",
+        "salary": 5,
+        "career": "IT",
+        "attributes": "{\"key3\":\"value\"}"
+      },
+      {
+        "id": "4",
+        "firstName": "amit",
+        "lastName": "kumar",
+        "salary": 8,
+        "career": "Finance",
+        "attributes": "{\"key4\":\"value\"}"
+      }
+    ]
+  }
+}
+```
+* Mutations 
 
 ### saving data 
 ```
@@ -67,7 +113,26 @@ mutation{
   }
 }
 ```
-
+* response 
+```
+{
+  "data": {
+    "saveEmployee": {
+      "id": "10",
+      "firstName": "sonu",
+      "lastName": "singh",
+      "career": "it",
+      "salary": 3,
+      "doj": "1010-01-01",
+      "gender": "MALE",
+      "phone": [
+        "1234567890",
+        "12345678999"
+      ]
+    }
+  }
+}
+```
 
 ### updating data 
 ```
@@ -77,13 +142,21 @@ mutation{
   }
 }
 ```
-
-### Filter Query 
+* response 
 ```
-query {
-  employeesFilter(filter: { salary: { operator: "gt" value: "5" } }) { id firstName lastName salary } 
+{
+  "data": {
+    "updateEmployee": {
+      "id": "10",
+      "firstName": "sonu",
+      "lastName": "kumar singh",
+      "career": "it",
+      "salary": 3
+    }
+  }
 }
 ```
+
 
 ### removing data
 ```
@@ -95,7 +168,19 @@ mutation{
     career
   }
 }
-
+```
+* response 
+```
+{
+  "data": {
+    "removeEmployee": {
+      "id": "10",
+      "firstName": "sonu",
+      "lastName": "kumar singh",
+      "career": "it"
+    }
+  }
+}
 ```
 
 
@@ -140,15 +225,6 @@ curl --location 'http://localhost:8080/api/espark/graphql' \
 
 ```
 
-
-### Filter Query 
-```   
-curl --location 'http://localhost:8080/api/espark/graphql' \
---header 'Content-Type: application/json' \
---header 'Cookie: cookieName=' \
---data '{"query":"query {\n  employeesFilter(filter: { salary: { operator: \"gt\" value: \"5\" } }) { id firstName lastName salary } \n}"}'
-```
-
 ### Deleting Employee
 ```
 curl --location 'http://localhost:8080/api/espark/graphql' \
@@ -157,39 +233,5 @@ curl --location 'http://localhost:8080/api/espark/graphql' \
 	"query": "mutation{removeEmployee(id: 10){  id  firstName  lastName  career}\n}"
 }'
 ```
-
-
-## SONAR 
-$ Downloads/sonarqube-10.1.0.73491 2/bin/macosx-universal-64
-
-$ sh sonar.sh start
-```
-$  sh sonar.sh start 
-/usr/bin/java
-Starting SonarQube...
-Started SonarQube.
-```
-```
-$ sh sonar.sh stop 
-/usr/bin/javamvn c
-Gracefully stopping SonarQube...
-Stopped SonarQube.
-
-```
-url
-http://localhost:9000/
-admin/admin
-
-create project manually
-analyze your project locally -> provide a token -> generate
-it will generate a token
-run your project from maven -> it will provide a maven cmd like below to run
-and build a code for sonar analysis 
-
-$ mvn clean verify sonar:sonar \
--Dsonar.projectKey=graphql \
--Dsonar.projectName='graphql' \
--Dsonar.host.url=http://localhost:9000 \
--Dsonar.token=sqp_d2802588ba05e9255839f21e5ce9bf8d5c84dc8f
 
 
