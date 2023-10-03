@@ -1,5 +1,6 @@
 scalar Date
 scalar JSON
+scalar Email
 
 
 
@@ -12,7 +13,7 @@ type Employee {
     firstName: String
     lastName: String
     career: String
-    email: String
+    email: Email
     salary: Int
     doj: Date
     gender: Gender
@@ -25,7 +26,7 @@ input EmployeeBean {
     firstName: String!
     lastName: String!
     career: String
-    email: String
+    email: Email
     salary: Int
     doj: Date
     gender: Gender

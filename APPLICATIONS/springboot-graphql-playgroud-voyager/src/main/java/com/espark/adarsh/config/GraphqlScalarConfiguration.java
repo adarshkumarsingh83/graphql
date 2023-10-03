@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Configuration
 public class GraphqlScalarConfiguration {
@@ -27,6 +28,7 @@ public class GraphqlScalarConfiguration {
       return   RuntimeWiring.newRuntimeWiring()
                 .scalar(dateScalar())
                 .scalar(jsonScalar())
+                .scalar(emailScalar())
                 .build();
     }
 
@@ -131,6 +133,88 @@ public class GraphqlScalarConfiguration {
                     }
                 }).build();
 
+    }
+
+    @Bean
+    public GraphQLScalarType emailScalar() {
+        return GraphQLScalarType.newScalar()
+                .name("Email") //graphql type define in the schema file
+                .description("Email as scalar.")
+                .coercing(new Coercing<Object, String>() {
+                    @Override
+                    public String serialize(final Object dataFetcherResult) {
+                        if (dataFetcherResult instanceof String) {
+                            return serializeEmail(dataFetcherResult);
+                        } else {
+                            throw new CoercingSerializeException("Expected a Email object.");
+                        }
+                    }
+
+                    @Override
+                    public Object parseValue(final Object input) {
+                        try {
+                            if (input instanceof String) {
+                                return parseEmailFromAstLiteral(input);
+                            } else {
+                                throw new CoercingParseValueException("Expected a String");
+                            }
+                        } catch (DateTimeParseException e) {
+                            throw new CoercingParseValueException(String.format("Not a valid date: '%s'.", input), e
+                            );
+                        }
+                    }
+
+                    @Override
+                    public Object parseLiteral(final Object input) {
+                        if (input instanceof StringValue) {
+                            try {
+                                return parseEmailFromAstLiteral(input);
+                            } catch (DateTimeParseException e) {
+                                throw new CoercingParseLiteralException(e);
+                            }
+                        } else {
+                            throw new CoercingParseLiteralException("Expected a StringValue.");
+                        }
+                    }
+                })
+                .build();
+
+    }
+
+    private static boolean looksLikeAnEmailAddress(String possibleEmailValue) {
+        // ps.  I am not trying to replicate RFC-3696 clearly
+        return Pattern.matches( "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$", possibleEmailValue);
+    }
+
+    private static String serializeEmail(Object dataFetcherResult) {
+        String possibleEmailValue = String.valueOf(dataFetcherResult);
+        if (looksLikeAnEmailAddress(possibleEmailValue)) {
+            return possibleEmailValue;
+        } else {
+            throw new CoercingSerializeException("Unable to serialize " + possibleEmailValue + " as an email address");
+        }
+    }
+
+    private static Object parseEmailFromVariable(Object input) {
+        if (input instanceof String) {
+            String possibleEmailValue = input.toString();
+            if (looksLikeAnEmailAddress(possibleEmailValue)) {
+                return possibleEmailValue;
+            }
+        }
+        throw new CoercingParseValueException("Unable to parse variable value " + input + " as an email address");
+    }
+
+    private static Object parseEmailFromAstLiteral(Object input) {
+        if (input instanceof StringValue) {
+            String possibleEmailValue = ((StringValue) input).getValue();
+            if (looksLikeAnEmailAddress(possibleEmailValue)) {
+                return possibleEmailValue;
+            }
+        }
+        throw new CoercingParseLiteralException(
+                "Value is not any email address : '" + String.valueOf(input) + "'"
+        );
     }
 
 }
