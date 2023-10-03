@@ -12,6 +12,7 @@ type Employee {
     firstName: String
     lastName: String
     career: String
+    email: String
     salary: Int
     doj: Date
     gender: Gender
@@ -24,6 +25,7 @@ input EmployeeBean {
     firstName: String!
     lastName: String!
     career: String
+    email: String
     salary: Int
     doj: Date
     gender: Gender

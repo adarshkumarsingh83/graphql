@@ -57,8 +57,8 @@ username, pwd , dburl and db driver class is mentioned in application.properties
     lastName
     salary
     career
-    attributes
-    
+    email
+    attributes    
   }
 }
 ```
@@ -73,6 +73,7 @@ username, pwd , dburl and db driver class is mentioned in application.properties
         "lastName": "kumar",
         "salary": 10,
         "career": "It",
+        "email": "adarsh@kumar.com",
         "attributes": "{\"key1\":\"value\"}"
       },
       {
@@ -81,6 +82,7 @@ username, pwd , dburl and db driver class is mentioned in application.properties
         "lastName": "singh",
         "salary": 10,
         "career": "IT",
+        "email": "radha@singh.com",
         "attributes": "{\"key2\":\"value\"}"
       },
       {
@@ -89,6 +91,7 @@ username, pwd , dburl and db driver class is mentioned in application.properties
         "lastName": "singh",
         "salary": 5,
         "career": "IT",
+        "email": "sonu@singh.com",
         "attributes": "{\"key3\":\"value\"}"
       },
       {
@@ -97,6 +100,7 @@ username, pwd , dburl and db driver class is mentioned in application.properties
         "lastName": "kumar",
         "salary": 8,
         "career": "Finance",
+        "email": "amit@kumar.com",
         "attributes": "{\"key4\":\"value\"}"
       }
     ]

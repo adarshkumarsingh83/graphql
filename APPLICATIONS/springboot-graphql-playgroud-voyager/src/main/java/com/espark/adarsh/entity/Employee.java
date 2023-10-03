@@ -17,6 +17,7 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String career;
+    private String email;
 
     private Long salary;
 
@@ -51,21 +52,23 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Employee(Long id, String firstName, String lastName, String career, Long salary, LocalDate doj, Gender gender) {
+    public Employee(Long id, String firstName, String lastName, String career, String email, Long salary, LocalDate doj, Gender gender) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.career = career;
+        this.email = email;
         this.salary = salary;
         this.doj = doj;
         this.gender = gender;
     }
 
-    public Employee(Long id, String firstName, String lastName, String career, Long salary, LocalDate doj, Gender gender, Map<String, String> attributes, List<String> phone) {
+    public Employee(Long id, String firstName, String lastName, String career,String email,  Long salary, LocalDate doj, Gender gender, Map<String, String> attributes, List<String> phone) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.career = career;
+        this.email = email;
         this.salary = salary;
         this.doj = doj;
         this.gender = gender;
@@ -103,6 +106,14 @@ public class Employee {
 
     public void setCareer(String career) {
         this.career = career;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getSalary() {

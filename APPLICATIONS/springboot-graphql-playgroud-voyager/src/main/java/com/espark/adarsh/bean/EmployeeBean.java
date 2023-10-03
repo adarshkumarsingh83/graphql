@@ -19,6 +19,7 @@ public class EmployeeBean {
     @NotEmpty
     private String lastName;
     private String career;
+    private String email;
 
     private Long salary;
 
@@ -33,11 +34,12 @@ public class EmployeeBean {
     public EmployeeBean() {
     }
 
-    public EmployeeBean(Long id, String firstName, String lastName, String career, Long salary, LocalDate doj, Gender gender, Map<String,String> attributes) {
+    public EmployeeBean(Long id, String firstName, String lastName, String career,String email, Long salary, LocalDate doj, Gender gender, Map<String,String> attributes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.career = career;
+        this.email = email;
         this.salary = salary;
         this.doj = doj;
         this.gender = gender;
@@ -74,6 +76,14 @@ public class EmployeeBean {
 
     public void setCareer(String career) {
         this.career = career;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getSalary() {
@@ -119,6 +129,6 @@ public class EmployeeBean {
     }
 
     public Employee getEmployee() {
-        return new Employee(this.id, this.firstName, this.lastName, this.career,this.salary,this.doj,this.gender,this.attributes,this.phone);
+        return new Employee(this.id, this.firstName, this.lastName, this.career,this.email,this.salary,this.doj,this.gender,this.attributes,this.phone);
     }
 }
