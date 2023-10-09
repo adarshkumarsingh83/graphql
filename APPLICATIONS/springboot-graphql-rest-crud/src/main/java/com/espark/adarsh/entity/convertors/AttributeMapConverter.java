@@ -3,10 +3,11 @@ package com.espark.adarsh.entity.convertors;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+
 import java.util.Map;
 
 @Slf4j

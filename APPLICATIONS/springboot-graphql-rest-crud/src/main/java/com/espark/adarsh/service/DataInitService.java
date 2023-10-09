@@ -1,6 +1,7 @@
 package com.espark.adarsh.service;
 
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -10,7 +11,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Service;
 
 
-import javax.annotation.PostConstruct;
+
 import javax.sql.DataSource;
 
 @Service

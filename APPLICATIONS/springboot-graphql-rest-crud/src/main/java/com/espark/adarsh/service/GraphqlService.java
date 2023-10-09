@@ -4,7 +4,6 @@ package com.espark.adarsh.service;
 import com.espark.adarsh.bean.EmployeeBean;
 import com.espark.adarsh.bean.ResponseBean;
 import com.espark.adarsh.entity.Employee;
-import com.espark.adarsh.exception.GraphqlException;
 import com.espark.adarsh.filter.EmployeeFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -63,6 +62,46 @@ public class GraphqlService {
                 .errors(errorsList)
                 .build();
 
+    }
+
+    public ResponseBean<Employee>  getEmployees(Map<String,String> input){
+        Long id = Long.parseLong(input.get("id"));
+        ExecutionInput executionInput = ExecutionInput.newExecutionInput()
+                .query("{" + input.get("query") + "}")
+                .graphQLContext(new HashMap<>() {
+                    {
+                        put("id",id);
+                    }
+                })
+                .build();
+        ExecutionResult executionResult = graphQL.execute(executionInput);
+        LinkedHashMap linkedHashMap = executionResult.getData();
+        List<GraphQLError> errors = executionResult.getErrors();
+        List<String> errorsList = new LinkedList();
+
+        if (errors != null && !errors.isEmpty()) {
+            errorsList = errors.stream()
+                    .map(e -> e.getMessage())
+                    .collect(Collectors.toList());
+            log.error("GraphqlService getEmployees {}", errorsList);
+        }
+
+        Employee employee = null;
+        try {
+            if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
+                String data = objectMapper.writeValueAsString(linkedHashMap.get(input.get("queryName")));
+                employee = objectMapper.readValue(data, Employee.class);
+            }
+            log.info("Graphql Response {}", employee);
+
+        } catch (JsonProcessingException jsonProcessingException) {
+            log.error(jsonProcessingException.getMessage());
+            errorsList.add(jsonProcessingException.getMessage());
+        }
+        return ResponseBean.<Employee>builder()
+                .data(employee)
+                .errors(errorsList)
+                .build();
     }
 
 

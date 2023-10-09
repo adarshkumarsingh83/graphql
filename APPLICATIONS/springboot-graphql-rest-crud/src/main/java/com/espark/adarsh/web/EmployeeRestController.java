@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class EmployeeRestController {
@@ -54,6 +55,12 @@ public class EmployeeRestController {
     @PostMapping("/employee/filter")
     public ResponseBean<Iterable<Employee>> employeesFilter(@RequestBody EmployeeFilter filter) {
        return this.graphqlService.employeesFilter("employeesFilter{ id firstName lastName doj gender}",filter);
+    }
+
+
+    @PostMapping("/employee/fetch")
+    public ResponseBean getEmployees(@RequestBody Map<String,String> query) {
+        return this.graphqlService.getEmployees(query);
     }
 
 }

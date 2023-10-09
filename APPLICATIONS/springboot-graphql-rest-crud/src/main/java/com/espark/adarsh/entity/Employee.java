@@ -1,10 +1,12 @@
 package com.espark.adarsh.entity;
 
 import com.espark.adarsh.entity.convertors.AttributeMapConverter;
+import com.espark.adarsh.entity.convertors.AttributeMapDeserializer;
 import com.espark.adarsh.entity.convertors.PhoneListConverter;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ public class Employee {
     private Gender gender;
 
     @Convert(converter = AttributeMapConverter.class)
+    @JsonDeserialize(using = AttributeMapDeserializer.class)
     private Map<String, String> attributes;
 
 
@@ -137,6 +140,14 @@ public class Employee {
 
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
+    }
+
+    public List<String> getPhone() {
+        return phone;
+    }
+
+    public void setPhone(List<String> phone) {
+        this.phone = phone;
     }
 }
 
