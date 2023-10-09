@@ -31,35 +31,34 @@ public class EmployeeRestController {
 
     @GetMapping("/employee/{id}")
     public ResponseBean<Employee> getEmployee(@PathVariable("id") Long id) {
-        return this.graphqlService.getEmployee("getEmployee{ id firstName lastName doj gender}",id);
+        return this.graphqlService.getEmployee("getEmployee{ id firstName lastName doj gender}", id);
     }
 
     @PostMapping("/employee")
     public ResponseBean<Employee> saveEmployee(@RequestBody @Valid EmployeeBean employeeBean) throws JsonProcessingException {
-        return this.graphqlService.saveEmployee("saveEmployee(employeeBean:"+employeeBean.toString()+"){ id firstName lastName doj gender}",employeeBean);
+        return this.graphqlService.saveEmployee("saveEmployee(employeeBean:" + employeeBean.toString() + "){ id firstName lastName doj gender}", employeeBean);
     }
 
-   @DeleteMapping("/employee/{id}")
+    @DeleteMapping("/employee/{id}")
     public ResponseBean<Employee> removeEmployee(@PathVariable("id") Long id) {
-        return this.graphqlService.removeEmployee("removeEmployee{ id firstName lastName doj gender}",id);
+        return this.graphqlService.removeEmployee("removeEmployee{ id firstName lastName doj gender}", id);
     }
-
 
 
     @PutMapping("/employee")
     public ResponseBean<Employee> updateEmployee(@RequestBody @Valid EmployeeBean employeeBean) {
-        return this.graphqlService.updateEmployee("updateEmployee(employeeBean:"+employeeBean.toString()+"){ id firstName lastName doj gender}",employeeBean.getId(), employeeBean);
+        return this.graphqlService.updateEmployee("updateEmployee(employeeBean:" + employeeBean.toString() + "){ id firstName lastName doj gender}", employeeBean.getId(), employeeBean);
     }
 
 
     @PostMapping("/employee/filter")
     public ResponseBean<Iterable<Employee>> employeesFilter(@RequestBody EmployeeFilter filter) {
-       return this.graphqlService.employeesFilter("employeesFilter{ id firstName lastName doj gender}",filter);
+        return this.graphqlService.employeesFilter("employeesFilter{ id firstName lastName doj gender}", filter);
     }
 
 
     @PostMapping("/employee/fetch")
-    public ResponseBean getEmployees(@RequestBody Map<String,String> query) {
+    public ResponseBean getEmployees(@RequestBody Map<String, Object> query) {
         return this.graphqlService.getEmployees(query);
     }
 

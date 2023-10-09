@@ -52,8 +52,8 @@
 ```
 { 
     "queryName":"getEmployee",
-    "query": "getEmployee{ id firstName lastName doj gender attributes phone salary career}",
-    "id":"1"
+    "query": "{ getEmployee{ id firstName lastName doj gender attributes phone salary career} }",
+    "param": {"id":"1"}
 }
 ```
 * response 

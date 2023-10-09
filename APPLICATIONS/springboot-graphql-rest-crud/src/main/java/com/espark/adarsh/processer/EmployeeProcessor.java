@@ -34,7 +34,7 @@ public class EmployeeProcessor {
         return new DataFetcher() {
             @Override
             public Object get(DataFetchingEnvironment environment) {
-                Long id = environment.getGraphQlContext().get("id");
+                Long id = Long.parseLong(environment.getGraphQlContext().get("id"));
                 Employee employee = null;
                 DataFetcherResult dataFetcherResult = null;
                 try {

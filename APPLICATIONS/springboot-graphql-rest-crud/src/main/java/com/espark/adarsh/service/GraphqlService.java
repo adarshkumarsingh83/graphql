@@ -46,7 +46,7 @@ public class GraphqlService {
         }
 
         List<Employee> employees = new ArrayList<>();
-        if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
+        if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
             try {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("getAllEmployee"));
                 employees = objectMapper.readValue(data, new TypeReference<List<Employee>>() {
@@ -64,15 +64,24 @@ public class GraphqlService {
 
     }
 
-    public ResponseBean<Employee>  getEmployees(Map<String,String> input){
-        Long id = Long.parseLong(input.get("id"));
+    public ResponseBean<Employee> getEmployees(Map<String, Object> input) {
+        Map<String, Object> param = null;
+        if (input.containsKey("param") && input.get("param") != null) {
+            param = (Map<String, Object>) input.get("param");
+        }
+        String query = "";
+        if (input.containsKey("query") && input.get("query") != null) {
+            query = input.get("query").toString();
+        }
+
+        String queryName = "";
+        if (input.containsKey("queryName") && input.get("queryName") != null) {
+            queryName = input.get("queryName").toString();
+        }
+
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
-                .query("{" + input.get("query") + "}")
-                .graphQLContext(new HashMap<>() {
-                    {
-                        put("id",id);
-                    }
-                })
+                .query(query)
+                .graphQLContext(param)
                 .build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         LinkedHashMap linkedHashMap = executionResult.getData();
@@ -88,8 +97,8 @@ public class GraphqlService {
 
         Employee employee = null;
         try {
-            if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
-                String data = objectMapper.writeValueAsString(linkedHashMap.get(input.get("queryName")));
+            if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
+                String data = objectMapper.writeValueAsString(linkedHashMap.get(queryName));
                 employee = objectMapper.readValue(data, Employee.class);
             }
             log.info("Graphql Response {}", employee);
@@ -133,7 +142,7 @@ public class GraphqlService {
 
         Employee employee = null;
         try {
-            if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
+            if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("getEmployee"));
                 employee = objectMapper.readValue(data, Employee.class);
             }
@@ -172,7 +181,7 @@ public class GraphqlService {
 
 
         Iterable<Employee> employees = new ArrayList<>();
-        if (linkedHashMap!=null && !linkedHashMap.isEmpty()) {
+        if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
             try {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get("employeesFilter"));
                 employees = objectMapper.readValue(data, new TypeReference<Iterable<Employee>>() {
