@@ -56,11 +56,5 @@ public class EmployeeRestController {
         return this.graphqlService.employeesFilter("employeesFilter{ id firstName lastName doj gender}", filter);
     }
 
-
-    @PostMapping("/employee/fetch")
-    public ResponseBean getEmployees(@RequestBody Map<String, Object> query) {
-        return this.graphqlService.getEmployees(query);
-    }
-
 }
 

@@ -5,6 +5,8 @@ import com.espark.adarsh.entity.Employee;
 import com.espark.adarsh.exception.EmployeeNotFoundException;
 import com.espark.adarsh.filter.EmployeeFilter;
 import com.espark.adarsh.service.EmployeeService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.execution.DataFetcherResult;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
@@ -19,6 +21,9 @@ public class EmployeeProcessor {
 
     @Autowired
     EmployeeService employeeService;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
 
     public DataFetcher<List<Employee>> getAllEmployee() {
@@ -110,7 +115,9 @@ public class EmployeeProcessor {
                 Iterable<Employee> iterable = null;
                 DataFetcherResult dataFetcherResult = null;
                 try {
-                    EmployeeFilter filter = environment.getGraphQlContext().get("filter");
+                    Map<String,Object> filterMap = environment.getGraphQlContext().get("filter");
+                    String data = objectMapper.writeValueAsString(filterMap);
+                    EmployeeFilter filter = objectMapper.readValue(data, new TypeReference<EmployeeFilter>() {});
                     iterable = employeeService.employeesFilter(filter);
                     dataFetcherResult = new DataFetcherResult(iterable, List.of());
                 } catch (Exception e) {
