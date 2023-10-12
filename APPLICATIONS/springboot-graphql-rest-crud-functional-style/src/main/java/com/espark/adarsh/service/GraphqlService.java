@@ -21,13 +21,17 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class GenericGraphqlService {
+public class GraphqlService {
 
     @Autowired
     GraphQL graphQL;
 
     @Autowired
     ObjectMapper objectMapper;
+
+    static final String QUERY = "query";
+    static final String PARAM = "param";
+    static final String QUERY_NAME = "queryName";
 
     private final Function<ExecutionResult, List<String>> errorListFunction = executionResult -> {
         List<GraphQLError> errors = executionResult.getErrors();
@@ -36,7 +40,7 @@ public class GenericGraphqlService {
             errorsList = errors.stream()
                     .map(e -> e.getMessage())
                     .collect(Collectors.toList());
-            log.error("GraphqlService getEmployees {}", errorsList);
+            log.error("GraphqlService errorListFunction {}", errorsList);
         }
         return errorsList;
     };
@@ -50,10 +54,10 @@ public class GenericGraphqlService {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get(queryName));
                 employee = objectMapper.readValue(data, Employee.class);
             }
-            log.info("Graphql Response {}", employee);
+            log.info("GraphqlService Response {}", employee);
 
         } catch (JsonProcessingException jsonProcessingException) {
-            log.error(jsonProcessingException.getMessage());
+            log.error("GraphqlService employeeDataFunction {} ", jsonProcessingException.getMessage());
             errorsList.add(jsonProcessingException.getMessage());
         }
 
@@ -75,7 +79,7 @@ public class GenericGraphqlService {
                 });
                 log.info("Graphql Response {}", employees);
             } catch (JsonProcessingException jsonProcessingException) {
-                log.error(jsonProcessingException.getMessage());
+                log.error("GraphqlService employeesDataFunction {} ", jsonProcessingException.getMessage());
                 errorsList.add(jsonProcessingException.getMessage());
             }
         }
@@ -94,9 +98,9 @@ public class GenericGraphqlService {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get(queryName));
                 employees = objectMapper.readValue(data, new TypeReference<Iterable<Employee>>() {
                 });
-                log.info("Graphql Response {}", employees);
+                log.info("GraphqlService employeeFilterFunction {}", employees);
             } catch (JsonProcessingException jsonProcessingException) {
-                log.error(jsonProcessingException.getMessage());
+                log.error("GraphqlService employeeFilterFunction {} ", jsonProcessingException.getMessage());
                 errorsList.add(jsonProcessingException.getMessage());
             }
         }
@@ -112,23 +116,27 @@ public class GenericGraphqlService {
             put("getEmployee", employeeDataFunction);
             put("getAllEmployee", employeesDataFunction);
             put("employeesFilter", employeeFilterFunction);
+            put("saveEmployee", employeeDataFunction);
+            put("updateEmployee", employeeDataFunction);
+            put("removeEmployee", employeeDataFunction);
+            put("updatePartialEmployee", employeeDataFunction);
         }
     };
 
     public ResponseBean processRequest(Map<String, Object> input) {
         Map<String, Object> param = new HashMap<>();
-        if (input.containsKey("param") && input.get("param") != null) {
-            param = (Map<String, Object>) input.get("param");
+        if (input.containsKey(PARAM) && input.get(PARAM) != null) {
+            param = (Map<String, Object>) input.get(PARAM);
         }
 
         String query = "";
-        if (input.containsKey("query") && input.get("query") != null) {
-            query = input.get("query").toString();
+        if (input.containsKey(QUERY) && input.get(QUERY) != null) {
+            query = input.get(QUERY).toString();
         }
 
         String queryName = "";
-        if (input.containsKey("queryName") && input.get("queryName") != null) {
-            queryName = input.get("queryName").toString();
+        if (input.containsKey(QUERY_NAME) && input.get(QUERY_NAME) != null) {
+            queryName = input.get(QUERY_NAME).toString();
         }
 
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()

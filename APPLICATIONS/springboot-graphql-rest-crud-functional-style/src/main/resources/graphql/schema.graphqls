@@ -1,0 +1,53 @@
+scalar Date
+scalar JSON
+
+
+
+enum Gender{
+    MALE,
+    FEMALE
+}
+type Employee {
+    id: Int!
+    firstName: String
+    lastName: String
+    career: String
+    salary: Int
+    doj: Date
+    gender: Gender
+    attributes: JSON
+    phone: [String]
+}
+
+input EmployeeBean {
+    id: Int!
+    firstName: String!
+    lastName: String!
+    career: String
+    salary: Int
+    doj: Date
+    gender: Gender
+    attributes: JSON
+    phone: [String]
+}
+
+input FilterField {
+    operator: String!
+    value: String!
+}
+
+input EmployeeFilter {
+    salary: FilterField
+    id: FilterField
+    career: FilterField
+}
+
+type Query {
+    getAllEmployee: [Employee]!
+    getEmployee(id: ID): Employee
+    employeesFilter(filter: EmployeeFilter): [Employee]
+    saveEmployee(employeeBean:EmployeeBean!): Employee
+    updateEmployee(employeeBean:EmployeeBean!): Employee
+    updatePartialEmployee(employeeBean:EmployeeBean!): Employee
+    removeEmployee(id: ID): Employee
+}
