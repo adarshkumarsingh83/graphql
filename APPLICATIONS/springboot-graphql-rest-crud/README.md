@@ -1,7 +1,6 @@
 # spring boot graphql rest based implementation 
 
 *  https://www.graphql-java.com/documentation/v21/getting-started
-* - https://nulpointerexception.com/2020/04/20/introduction-to-graphql-mutation-through-java/
 
 
 ### To compile 
