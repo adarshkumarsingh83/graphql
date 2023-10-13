@@ -5,8 +5,10 @@ import com.espark.adarsh.entity.convertors.AttributeMapDeserializer;
 import com.espark.adarsh.entity.convertors.PhoneListConverter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,8 @@ public class Employee {
     private Long salary;
 
     @Column(name = "doj", columnDefinition = "DATE")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate doj;
 
     @Enumerated(EnumType.STRING)

@@ -13,6 +13,7 @@ import graphql.GraphQL;
 import graphql.GraphQLError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -75,8 +76,7 @@ public class GraphqlService {
         if (linkedHashMap != null && !linkedHashMap.isEmpty()) {
             try {
                 String data = objectMapper.writeValueAsString(linkedHashMap.get(queryName));
-                employees = objectMapper.readValue(data, new TypeReference<List<Employee>>() {
-                });
+                employees = objectMapper.readValue(data, new TypeReference<List<Employee>>() {});
                 log.info("Graphql Response {}", employees);
             } catch (JsonProcessingException jsonProcessingException) {
                 log.error("GraphqlService employeesDataFunction {} ", jsonProcessingException.getMessage());

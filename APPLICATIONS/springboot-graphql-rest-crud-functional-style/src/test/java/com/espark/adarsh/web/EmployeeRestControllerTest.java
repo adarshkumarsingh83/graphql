@@ -15,6 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeRestControllerTest {
@@ -24,7 +26,6 @@ public class EmployeeRestControllerTest {
 
     @Mock
     GraphqlService graphqlService;
-
 
     Long id;
     EmployeeBean employee;
@@ -59,18 +60,33 @@ public class EmployeeRestControllerTest {
         };
     }
 
-   /* @Test
-    public void testGetAllEmployee() {
-        employeeRestController.getAllEmployee();
-        Mockito.verify(graphqlService, Mockito.atLeastOnce()).getAllEmployee(Mockito.any());
-    }
-
     @Test
-    public void testGetEmployee() {
-        employeeRestController.getEmployee(id);
-        Mockito.verify(graphqlService, Mockito.atLeastOnce()).getEmployee(Mockito.anyString(), Mockito.anyLong());
+    public void testGetAllEmployee() {
+        Map<String,Object> input =new HashMap<>(){
+            {
+                put("queryName","getAllEmployee");
+                put("query","{ getAllEmployee{ id firstName lastName doj gender} }");
+                put("param",new HashMap<>(){{}});
+            }
+        };
+        employeeRestController.processRequest(input);
+        Mockito.verify(graphqlService, Mockito.atLeastOnce()).processRequest(input);
     }
 
+  @Test
+    public void testGetEmployee() {
+      Map<String,Object> input =new HashMap<>(){
+          {
+              put("queryName","getEmployee");
+              put("query","{ getEmployee{ id firstName lastName doj gender} }");
+              put("param",new HashMap<>(){{}});
+          }
+      };
+        employeeRestController.processRequest(input);
+        Mockito.verify(graphqlService, Mockito.atLeastOnce()).processRequest(input);
+    }
+
+      /*
     @Test
     public void testSaveEmployee() throws JsonProcessingException {
         employeeRestController.saveEmployee(employee);

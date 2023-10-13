@@ -3,6 +3,7 @@ package com.espark.adarsh.service;
 import com.espark.adarsh.bean.ResponseBean;
 import com.espark.adarsh.entity.Employee;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.*;
 import org.junit.jupiter.api.Assertions;
@@ -47,8 +48,8 @@ public class GraphqlServiceTest {
         graphqlService = new GraphqlService();
         ReflectionTestUtils.setField(graphqlService, "graphQL", graphQL);
         ReflectionTestUtils.setField(graphqlService, "objectMapper", objectMapper);
-        getAllEmployeeResponse = this.getData("src/test/resources/getAllEmployee-response.json");
-        getEmployeeResponse = this.getData("src/test/resources/getEmployee-response.json");
+        getAllEmployeeResponse = this.getData("src/test/resources/getAllEmployee-ServiceResponse.json");
+        getEmployeeResponse = this.getData("src/test/resources/getEmployee-ServiceResponse.json");
     }
 
     public String getData(String fileName) throws IOException {
@@ -63,11 +64,20 @@ public class GraphqlServiceTest {
                 .then((Answer<ExecutionResult>) invocationMock -> executionResult);
         Map<String, Object> expected = new LinkedHashMap<>() {
             {
-                put("getAllEmployee", objectMapper.readTree(getEmployeeResponse));
+                put("getAllEmployee", objectMapper.readValue(getAllEmployeeResponse, new TypeReference<List<Employee>>() {
+                }));
+            }
+        };
+
+        Map<String,Object> input =new HashMap<>(){
+            {
+             put("queryName","getAllEmployee");
+             put("query","{ getAllEmployee{ id firstName lastName doj gender} }");
+             put("param",new HashMap<>(){{}});
             }
         };
         Mockito.when(executionResult.getData()).thenReturn(expected);
-        ResponseBean<List<Employee>> responseBean = graphqlService.getAllEmployee("getAllEmployee{ id firstName lastName doj gender}");
+        ResponseBean<List<Employee>> responseBean = graphqlService.processRequest(input);
         Assertions.assertNotNull(responseBean);
     }
 
@@ -77,6 +87,14 @@ public class GraphqlServiceTest {
         Mockito.when(graphQL.execute(Mockito.any(ExecutionInput.class)))
                 .then((Answer<ExecutionResult>) invocationMock -> executionResult);
 
+        Map<String,Object> input =new HashMap<>(){
+            {
+                put("queryName","getAllEmployee");
+                put("query","{ getAllEmployee{ id firstName lastName doj gender} }");
+                put("param",new HashMap<>(){{}});
+            }
+        };
+
         GraphQLError graphQLError= GraphqlErrorBuilder.newError()
                 .message("employee not found")
                 .build();
@@ -85,7 +103,7 @@ public class GraphqlServiceTest {
 
         Map<String, Object> expected = new LinkedHashMap<>();
         Mockito.when(executionResult.getData()).thenReturn(expected);
-        ResponseBean<List<Employee>> responseBean =  graphqlService.getAllEmployee("getAllEmployee{ id firstName lastName doj gender}");
+        ResponseBean<List<Employee>> responseBean = graphqlService.processRequest(input);
         Assertions.assertEquals(responseBean.getErrors().get(0),graphQLError.getMessage());
     }
 
@@ -93,13 +111,21 @@ public class GraphqlServiceTest {
     public void getEmployee() throws JsonProcessingException {
         Mockito.when(graphQL.execute(Mockito.any(ExecutionInput.class)))
                 .then((Answer<ExecutionResult>) invocationMock -> executionResult);
+        Map<String,Object> input =new HashMap<>(){
+            {
+                put("queryName","getEmployee");
+                put("query","{ getEmployee{ id firstName lastName doj gender} }");
+                put("param",new HashMap<>(){{}});
+            }
+        };
         Map<String, Object> expected = new LinkedHashMap<>() {
             {
-                put("getEmployee", objectMapper.readTree(getEmployeeResponse));
+                put("getEmployee", objectMapper.readValue(getEmployeeResponse, new TypeReference<Employee>() {
+                }));
             }
         };
         Mockito.when(executionResult.getData()).thenReturn(expected);
-        ResponseBean<Employee> responseBean = graphqlService.getEmployee("getEmployee{ id firstName lastName doj gender}",1L);
+        ResponseBean<Employee> responseBean = graphqlService.processRequest(input);
         Assertions.assertNotNull(responseBean);
     }
 
@@ -110,6 +136,14 @@ public class GraphqlServiceTest {
         Mockito.when(graphQL.execute(Mockito.any(ExecutionInput.class)))
                 .then((Answer<ExecutionResult>) invocationMock -> executionResult);
 
+        Map<String,Object> input =new HashMap<>(){
+            {
+                put("queryName","getEmployee");
+                put("query","{ getEmployee{ id firstName lastName doj gender} }");
+                put("param",new HashMap<>(){{}});
+            }
+        };
+
         GraphQLError graphQLError= GraphqlErrorBuilder.newError()
                 .message("employee not found")
                 .build();
@@ -118,7 +152,7 @@ public class GraphqlServiceTest {
 
         Map<String, Object> expected = new LinkedHashMap<>();
         Mockito.when(executionResult.getData()).thenReturn(expected);
-        ResponseBean<Employee> responseBean =  graphqlService.getEmployee("getEmployee{ id firstName lastName doj gender}",1L);
+        ResponseBean<Employee> responseBean =  graphqlService.processRequest(input);
         Assertions.assertEquals(responseBean.getErrors().get(0),graphQLError.getMessage());
     }
 

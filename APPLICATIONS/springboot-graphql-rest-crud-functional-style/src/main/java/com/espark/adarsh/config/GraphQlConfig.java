@@ -5,6 +5,7 @@ import com.espark.adarsh.processer.EmployeeProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import graphql.GraphQL;
 import graphql.language.StringValue;
 import graphql.schema.*;
@@ -29,8 +30,6 @@ import java.util.Map;
 import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
 
 
-
-
 @Configuration
 public class GraphQlConfig {
 
@@ -42,7 +41,10 @@ public class GraphQlConfig {
     EmployeeProcessor employeeProcessor;
 
     @Autowired
-     ResourceLoader resourceLoader;
+    ResourceLoader resourceLoader;
+
+
+
 
     @Bean
     public GraphQL graphqlQl() throws IOException {
