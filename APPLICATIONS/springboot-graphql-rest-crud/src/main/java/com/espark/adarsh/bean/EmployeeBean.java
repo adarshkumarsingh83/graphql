@@ -37,6 +37,7 @@ public class EmployeeBean {
     public EmployeeBean() {
     }
 
+
     public EmployeeBean(Long id, String firstName, String lastName, String career, Long salary, LocalDate doj, Gender gender, Map<String,String> attributes) {
         this.id = id;
         this.firstName = firstName;
