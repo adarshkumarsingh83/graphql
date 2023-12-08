@@ -45,78 +45,80 @@ public class GraphqlProcessorTest {
     List<Employee> employeeList;
     Employee employeeData;
 
-    Map<String,Object> employeeFilter;
+    Map<String, Object> employeeFilter;
 
     @BeforeEach
     void init() throws IOException {
         employeeProcessor = new EmployeeProcessor();
         objectMapper.registerModule(new JavaTimeModule());
-        ReflectionTestUtils.setField(employeeProcessor,"objectMapper",objectMapper);
-        ReflectionTestUtils.setField(employeeProcessor,"employeeService",employeeService);
-
-        Resource allEmployeeResource =  loadResource("src/test/resources/getAllEmployee-response.json");
-       employeeList = objectMapper.readValue(allEmployeeResource.getInputStream(), new TypeReference<List<Employee>>() {});
+        ReflectionTestUtils.setField(employeeProcessor, "objectMapper", objectMapper);
+        ReflectionTestUtils.setField(employeeProcessor, "employeeService", employeeService);
+        Resource allEmployeeResource = loadResource("src/test/resources/getAllEmployee-response.json");
+        employeeList = objectMapper.readValue(allEmployeeResource.getInputStream(), new TypeReference<List<Employee>>() {
+        });
         Resource employeeResource = loadResource("src/test/resources/getEmployee-response.json");
+        employeeData = objectMapper.readValue(employeeResource.getInputStream(), new TypeReference<Employee>() {
+        });
         Resource employeeFilterResource = loadResource("src/test/resources/employeeFilterRequest.json");
-        employeeData = objectMapper.readValue(employeeResource.getInputStream(),new TypeReference<Employee>(){});
-        employeeFilter = objectMapper.readValue(employeeFilterResource.getInputStream(), new TypeReference<Map>() {});
+        employeeFilter = objectMapper.readValue(employeeFilterResource.getInputStream(), new TypeReference<Map>() {
+        });
     }
 
-    Resource loadResource(String filePath ) throws IOException {
+    Resource loadResource(String filePath) throws IOException {
         Resource file = resourceLoader.getResource(filePath);
-       return file;
+        return file;
     }
 
     @Test
     public void getAllEmployee() throws Exception {
-        Map<String,Object> param = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
         GraphQLContext graphQLContext = GraphQLContext.of(param);
         DataFetchingEnvironment environment = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
                 .graphQLContext(graphQLContext)
                 .build();
         Mockito.when(employeeService.getAllEmployee()).thenReturn(employeeList);
-        DataFetcher<List<Employee>> dataFetcher =  employeeProcessor.getAllEmployee();
-        Assert.notNull(dataFetcher,"empty response object");
-        List<Employee> employeeList= dataFetcher.get(environment);
-        Assert.notNull(employeeList,"employeeList response object");
+        DataFetcher<List<Employee>> dataFetcher = employeeProcessor.getAllEmployee();
+        Assert.notNull(dataFetcher, "empty response object");
+        List<Employee> employeeList = dataFetcher.get(environment);
+        Assert.notNull(employeeList, "employeeList response object");
     }
 
 
     @Test
     public void getEmployee() throws Exception {
-        Map<String,Object> param = new HashMap<>();
-        param.put("id","1");
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", "1");
         GraphQLContext graphQLContext = GraphQLContext.of(param);
         DataFetchingEnvironment environment = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
                 .graphQLContext(graphQLContext)
                 .build();
         Mockito.when(employeeService.getEmployee(Mockito.anyLong())).thenReturn(employeeData);
-        DataFetcher<Employee> dataFetcher =  employeeProcessor.getEmployee();
-        Assert.notNull(dataFetcher,"empty response object");
+        DataFetcher<Employee> dataFetcher = employeeProcessor.getEmployee();
+        Assert.notNull(dataFetcher, "empty response object");
         Object dataFetcherResult = dataFetcher.get(environment);
-        Assert.notNull(dataFetcherResult,"employee response object");
+        Assert.notNull(dataFetcherResult, "employee response object");
         DataFetcherResult<Employee> dataFetcherResultEmployee = (DataFetcherResult<Employee>) dataFetcherResult;
         Employee employee = dataFetcherResultEmployee.getData();
-        Assert.notNull(employee,"employee response object");
+        Assert.notNull(employee, "employee response object");
     }
 
 
     @Test
     public void removeEmployee() throws Exception {
-        Map<String,Object> param = new HashMap<>();
-        param.put("id",1L);
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", 1L);
         GraphQLContext graphQLContext = GraphQLContext.of(param);
         DataFetchingEnvironment environment = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
                 .graphQLContext(graphQLContext)
                 .build();
         Mockito.when(employeeService.removeEmployee(Mockito.anyLong())).thenReturn(employeeData);
-        DataFetcher<Employee> dataFetcher =  employeeProcessor.removeEmployee();
-        Assert.notNull(dataFetcher,"empty response object");
+        DataFetcher<Employee> dataFetcher = employeeProcessor.removeEmployee();
+        Assert.notNull(dataFetcher, "empty response object");
         Object dataFetcherResult = dataFetcher.get(environment);
-        Assert.notNull(dataFetcherResult,"employee response object");
+        Assert.notNull(dataFetcherResult, "employee response object");
         DataFetcherResult<Employee> dataFetcherResultEmployee = (DataFetcherResult<Employee>) dataFetcherResult;
         Employee employee = dataFetcherResultEmployee.getData();
-        Assert.notNull(employee,"employee response object");
+        Assert.notNull(employee, "employee response object");
 
     }
 
@@ -124,60 +126,60 @@ public class GraphqlProcessorTest {
     @Test
     public void saveEmployee() throws Exception {
         EmployeeBean employeeBean = new EmployeeBean();
-        Map<String,Object> param = new HashMap<>();
-        param.put("employeeBean",employeeBean);
+        Map<String, Object> param = new HashMap<>();
+        param.put("employeeBean", employeeBean);
         GraphQLContext graphQLContext = GraphQLContext.of(param);
         DataFetchingEnvironment environment = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
                 .graphQLContext(graphQLContext)
                 .build();
         Mockito.when(employeeService.saveEmployee(Mockito.any(Employee.class))).thenReturn(employeeData);
-        DataFetcher<Employee> dataFetcher =  employeeProcessor.saveEmployee();
-        Assert.notNull(dataFetcher,"empty response object");
+        DataFetcher<Employee> dataFetcher = employeeProcessor.saveEmployee();
+        Assert.notNull(dataFetcher, "empty response object");
         Object dataFetcherResult = dataFetcher.get(environment);
-        Assert.notNull(dataFetcherResult,"employee response object");
+        Assert.notNull(dataFetcherResult, "employee response object");
         DataFetcherResult<Employee> dataFetcherResultEmployee = (DataFetcherResult<Employee>) dataFetcherResult;
         Employee employee = dataFetcherResultEmployee.getData();
-        Assert.notNull(employee,"employee response object");
+        Assert.notNull(employee, "employee response object");
 
     }
+
     @Test
     public void updateEmployee() throws Exception {
         EmployeeBean employeeBean = new EmployeeBean();
         employeeBean.setId(1L);
-        Map<String,Object> param = new HashMap<>();
-        param.put("employeeBean",employeeBean);
+        Map<String, Object> param = new HashMap<>();
+        param.put("employeeBean", employeeBean);
         GraphQLContext graphQLContext = GraphQLContext.of(param);
         DataFetchingEnvironment environment = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
                 .graphQLContext(graphQLContext)
                 .build();
-        Mockito.when(employeeService.updateEmployee(Mockito.anyLong(),Mockito.any(Employee.class))).thenReturn(employeeData);
-        DataFetcher<Employee> dataFetcher =  employeeProcessor.updateEmployee();
-        Assert.notNull(dataFetcher,"empty response object");
+        Mockito.when(employeeService.updateEmployee(Mockito.anyLong(), Mockito.any(Employee.class))).thenReturn(employeeData);
+        DataFetcher<Employee> dataFetcher = employeeProcessor.updateEmployee();
+        Assert.notNull(dataFetcher, "empty response object");
         Object dataFetcherResult = dataFetcher.get(environment);
-        Assert.notNull(dataFetcherResult,"employee response object");
+        Assert.notNull(dataFetcherResult, "employee response object");
         DataFetcherResult<Employee> dataFetcherResultEmployee = (DataFetcherResult<Employee>) dataFetcherResult;
         Employee employee = dataFetcherResultEmployee.getData();
-        Assert.notNull(employee,"employee response object");
+        Assert.notNull(employee, "employee response object");
     }
 
     @Test
     public void employeesFilter() throws Exception {
-        Map<String,Object> filterMap = new HashMap<>();
-        filterMap.put("filter",employeeFilter);
+        Map<String, Object> filterMap = new HashMap<>();
+        filterMap.put("filter", employeeFilter);
         GraphQLContext graphQLContext = GraphQLContext.of(filterMap);
         DataFetchingEnvironment environment = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
                 .graphQLContext(graphQLContext)
                 .build();
         Mockito.when(employeeService.employeesFilter(Mockito.any(EmployeeFilter.class))).thenReturn(employeeList);
-        DataFetcher<Iterable<Employee>> dataFetcher =  employeeProcessor.employeesFilter();
-        Assert.notNull(dataFetcher,"empty response object");
+        DataFetcher<Iterable<Employee>> dataFetcher = employeeProcessor.employeesFilter();
+        Assert.notNull(dataFetcher, "empty response object");
         Object dataFetcherResult = dataFetcher.get(environment);
-        Assert.notNull(dataFetcherResult,"employee response object");
+        Assert.notNull(dataFetcherResult, "employee response object");
         DataFetcherResult<Iterable<Employee>> dataFetcherResultEmployee = (DataFetcherResult<Iterable<Employee>>) dataFetcherResult;
         Iterable<Employee> employee = dataFetcherResultEmployee.getData();
-        Assert.notNull(employee,"employee response object");
+        Assert.notNull(employee, "employee response object");
     }
-
 
 
 }
