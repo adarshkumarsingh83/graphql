@@ -1,6 +1,8 @@
 package com.espark.adarsh.entity;
 
 
+import com.espark.adarsh.annotation.GraphQueries;
+import com.espark.adarsh.annotation.GraphQuery;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,6 +10,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "departments")
+@GraphQueries(value = "departments{*}")
 public class Department {
 
     @Id
@@ -16,10 +19,12 @@ public class Department {
     private Long deptId;
     private String name;
 
+    @GraphQuery(value = "address{*}", classType = Address.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id", referencedColumnName = "address_id")
     Address address;
 
+    @GraphQuery(value = "contact{*}", classType = Contact.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id", referencedColumnName = "contact_id")
     Contact contact;

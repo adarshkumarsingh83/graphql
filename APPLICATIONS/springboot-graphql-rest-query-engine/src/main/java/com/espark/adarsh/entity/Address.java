@@ -1,12 +1,15 @@
 package com.espark.adarsh.entity;
 
+import com.espark.adarsh.annotation.GraphQueries;
 import jakarta.persistence.*;
 import lombok.Data;
+
 
 
 @Data
 @Entity
 @Table(name = "addresses")
+@GraphQueries(value = "addresses{*}")
 public class Address {
 
     @Id

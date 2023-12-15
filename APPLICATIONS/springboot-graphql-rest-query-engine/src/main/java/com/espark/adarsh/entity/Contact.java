@@ -1,5 +1,6 @@
 package com.espark.adarsh.entity;
 
+import com.espark.adarsh.annotation.GraphQueries;
 import com.espark.adarsh.entity.converter.PhoneListConverter;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,9 +8,11 @@ import lombok.Data;
 import java.util.List;
 
 
+
 @Data
 @Entity
 @Table(name = "contacts")
+@GraphQueries(value = "contacts{*}")
 public class Contact {
 
     @Id

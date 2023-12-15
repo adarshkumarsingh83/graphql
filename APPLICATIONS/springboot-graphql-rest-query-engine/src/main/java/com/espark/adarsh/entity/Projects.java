@@ -1,8 +1,9 @@
 package com.espark.adarsh.entity;
 
+import com.espark.adarsh.annotation.GraphQueries;
+import com.espark.adarsh.annotation.GraphQuery;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "projects")
+@GraphQueries(value = "projects{*}")
 public class Projects implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,13 +26,14 @@ public class Projects implements Serializable {
     @Column(name = "endDate", columnDefinition = "DATE")
     private LocalDate endDate;
 
+    @GraphQuery(value = "address{*}",classType = Address.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", referencedColumnName = "address_id")
     Address address;
 
+    @GraphQuery(value = "contact{*}",classType = Contact.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", referencedColumnName = "contact_id")
     Contact contact;
-
 
 }
