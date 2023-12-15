@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface GraphQueries {
+public @interface GraphRootQuery {
 
     String value() default "";
 

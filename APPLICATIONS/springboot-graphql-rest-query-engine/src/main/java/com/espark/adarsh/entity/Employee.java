@@ -1,7 +1,7 @@
 package com.espark.adarsh.entity;
 
 
-import com.espark.adarsh.annotation.GraphQueries;
+import com.espark.adarsh.annotation.GraphRootQuery;
 import com.espark.adarsh.annotation.GraphQuery;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "employees")
-@GraphQueries(value = "employees{*}")
+@GraphRootQuery(value = "employees{*}")
 public class Employee {
 
     @Id
