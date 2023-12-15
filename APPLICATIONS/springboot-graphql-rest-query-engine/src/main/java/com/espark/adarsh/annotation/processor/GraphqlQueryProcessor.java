@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -22,6 +23,7 @@ public class GraphqlQueryProcessor {
     private ConfigurableApplicationContext context;
 
 
+     Map<String,String> subQueryMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -33,12 +35,13 @@ public class GraphqlQueryProcessor {
         for (final Map.Entry<String, Object> bean : beans.entrySet()) {
             final Object object = bean.getValue();
             log.info("Beans {}", object.getClass().getName());
-
             final Field[] fields = object.getClass().getDeclaredFields();
             String query = processForClassFields(fields);
-            System.out.println(query);
-
+            subQueryMap.put(bean.getKey(),query);
         }
+        subQueryMap.entrySet().forEach(stringStringEntry -> {
+            log.info("regex {} query {}",stringStringEntry.getKey(),stringStringEntry.getValue());
+        });
     }
 
     public String processForClassFields(Field[] fields) {
@@ -49,12 +52,14 @@ public class GraphqlQueryProcessor {
                 if (graphQuery != null) {
                     //todo if fields haas @GraphQuery which is nested class
                     GraphQueryData graphQueryData = new GraphQueryData(field.getName(), graphQuery.value(), graphQuery.classType());
-                    log.info("Pushing to Stack Field Name: {}, GraphQuery Regex: {},  GraphQuery Type: {}", graphQueryData.getFieldName(), graphQueryData.getRegex(), graphQueryData.getClazz().getName());
+                    log.debug("Pushing to Stack Field Name: {}, GraphQuery Regex: {},  GraphQuery Type: {}", graphQueryData.getFieldName(), graphQueryData.getRegex(), graphQueryData.getClazz().getName());
                     Field[] declaredFields = graphQueryData.getClazz().getDeclaredFields();
-                    query+= graphQueryData.getFieldName()+"  " +processForClassFields(declaredFields);
+                    String subQuery = processForClassFields(declaredFields);
+                    log.debug("regex {} query{}",graphQueryData.getRegex(),subQuery);
+                    subQueryMap.put(graphQueryData.getRegex(),subQuery);
+                    query+= graphQueryData.getFieldName()+"  " +subQuery;
                 } else {
-                    // todo add field name in query string
-                    log.info("Field Name: {}  ", field.getName());
+                    log.debug("Field Name: {}  ", field.getName());
                     query+=" "+field.getName()+" ";
                 }
             }

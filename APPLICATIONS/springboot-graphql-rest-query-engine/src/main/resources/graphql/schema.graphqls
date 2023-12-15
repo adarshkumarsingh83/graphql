@@ -1,0 +1,48 @@
+scalar Date
+scalar JSON
+
+type Contact   {
+  contactId:Int!
+  type:String
+  email:String
+  phone: [String]
+ }
+
+ type Address   {
+    addressId:Int!
+    street:String
+    state:String
+    country:String
+  }
+
+ type Department   {
+    deptId:Int!
+    name:String
+    address: Address
+    contact:Contact
+ }
+
+type Projects   {
+    projectId:Int!
+    name:String
+    startDate:Date
+    endDate:Date
+    address: Address
+    contact:Contact
+}
+
+type Employee {
+    employeeId: Int!
+    firstName: String
+    lastName: String
+    career: String
+    department:Department
+    projects:[Projects]
+    address: Address
+    contact:Contact
+}
+
+type Query {
+    getAllEmployee: [Employee]!
+    getEmployee(id: ID): Employee
+}
