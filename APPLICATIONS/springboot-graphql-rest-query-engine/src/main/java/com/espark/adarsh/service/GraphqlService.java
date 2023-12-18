@@ -1,7 +1,7 @@
 package com.espark.adarsh.service;
 
 
-
+import com.espark.adarsh.annotation.processor.GraphqlQueryProcessor;
 import com.espark.adarsh.bean.ResponseBean;
 import com.espark.adarsh.entity.Employee;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,10 +29,24 @@ public class GraphqlService {
 
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    GraphqlQueryProcessor graphqlQueryProcessor;
 
-    public ResponseBean<List<Employee>> getAllEmployee(Map<String,String> payload) {
-        String query=payload.get("query");
+    Function<String, String> transformedQuery = (query) -> {
+        Set<Map.Entry<String, String>> entrySet = graphqlQueryProcessor.getSubQueryMap().entrySet();
+        for (Map.Entry<String, String> entry : entrySet) {
+            if (query.contains(entry.getKey())) {
+                query = query.replace(entry.getKey(), entry.getValue());
+            }
+        }
+        return query;
+    };
+
+    public ResponseBean<List<Employee>> getAllEmployee(Map<String, String> payload) {
+        String query = payload.get("query");
         String queryName = payload.get("queryName");
+        query = transformedQuery.apply(query);
+
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query(query)
                 .build();
@@ -66,11 +82,11 @@ public class GraphqlService {
     }
 
     public ResponseBean<Employee> getEmployee(Long id, Map<String, String> payload) {
-        String query=payload.get("query");
+        String query = payload.get("query");
         String queryName = payload.get("queryName");
-
+        query = transformedQuery.apply(query);
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
-                .query( query)
+                .query(query)
                 .variables(new HashMap<>() {
                     {
                         put("var", id);

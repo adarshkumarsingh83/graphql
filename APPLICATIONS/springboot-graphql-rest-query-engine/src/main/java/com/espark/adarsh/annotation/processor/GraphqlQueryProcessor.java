@@ -23,7 +23,7 @@ public class GraphqlQueryProcessor {
     private ConfigurableApplicationContext context;
 
 
-     Map<String,String> subQueryMap = new HashMap<>();
+     private Map<String,String> subQueryMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -83,5 +83,9 @@ public class GraphqlQueryProcessor {
                     ", clazz=" + clazz.getName() +
                     '}';
         }
+    }
+
+    public Map<String, String> getSubQueryMap() {
+        return subQueryMap;
     }
 }
