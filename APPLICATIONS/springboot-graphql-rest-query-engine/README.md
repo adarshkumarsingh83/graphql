@@ -454,6 +454,57 @@ curl --location 'http://localhost:8080/graphql/employees' \
 
 ```
 
+* with regex for  employees
+```
+{
+    "query":"{ getEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } }"
+    ,"queryName":"getEmployee"
+}
+
+
+{
+    "query":"{ getEmployee employee{*} }" 
+    ,"queryName":"getEmployee"
+}
+
+
+{
+    "query":"{ getEmployee  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  }   department{*} projects   {  projectId  name  startDate  endDate  address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  }  }" 
+    ,"queryName":"getEmployee"
+}
+
+
+
+{
+    "query":"{ getEmployee  {  employeeId  firstName  lastName  career    contact{*} address   {  addressId  street  state  country  }    department{*}   projects{*} }  }" 
+    ,"queryName":"getEmployee"
+}
+
+{
+    "query":"{ getEmployee  {  employeeId  firstName  lastName  career    contact{*}    address{*}     department{*}   projects{*} }  }" 
+    ,"queryName":"getEmployee"
+}
+
+
+{
+    "query":"{ getEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate   contact{*}    address{*}   }  } }"
+    ,"queryName":"getEmployee"
+}
+
+
+{
+    "query":"{ getEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name  contact{*}    address{*} } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } }"
+    ,"queryName":"getEmployee"
+}
+
+
+{
+    "query":"{ getEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name  contact{*}    address{*} } projects   {  projectId  name  startDate  endDate  contact{*}    address{*}  }  } }"
+    ,"queryName":"getEmployee"
+}
+
+```
+
 ### regex query generation in logs
 
 ```
