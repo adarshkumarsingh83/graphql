@@ -364,6 +364,18 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 }
 ```
 
+### graphql supported query 
+* http://localhost:8080/graphql/employee/query
+```
+{
+  "department{*}": "department  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } ",
+  "address{*}": "address  {  addressId  street  state  country  } ",
+  "contact{*}": "contact  {  contactId  type  email  phone  } ",
+  "employee{*}": " {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } ",
+  "projects{*}": "projects  {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } "
+}
+```
+
 ### curl query 
 ```
 

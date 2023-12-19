@@ -1,6 +1,7 @@
 package com.espark.adarsh.web;
 
 
+import com.espark.adarsh.annotation.processor.GraphqlQueryProcessor;
 import com.espark.adarsh.bean.ResponseBean;
 import com.espark.adarsh.entity.Employee;
 import com.espark.adarsh.service.GraphqlService;
@@ -18,6 +19,9 @@ public class GraphqlEmployeeRestController {
     GraphqlService graphqlService;
 
     @Autowired
+    GraphqlQueryProcessor graphqlQueryProcessor;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @PostMapping("/graphql/employees")
@@ -28,6 +32,12 @@ public class GraphqlEmployeeRestController {
     @PostMapping("/graphql/employee/{id}")
     public ResponseBean<Employee> getEmployee(@PathVariable("id") Long id, @RequestBody Map<String, String> payload) {
         return this.graphqlService.getEmployee(id, payload);
+    }
+
+
+    @GetMapping("/graphql/employee/query")
+    public Map<String,String> getQuery(){
+        return graphqlQueryProcessor.getSubQueryMap();
     }
 
 }
