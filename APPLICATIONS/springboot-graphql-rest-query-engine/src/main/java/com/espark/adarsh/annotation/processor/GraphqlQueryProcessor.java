@@ -50,13 +50,14 @@ public class GraphqlQueryProcessor {
             for (final Field field : fields) {
                 final GraphQuery graphQuery = field.getDeclaredAnnotation(GraphQuery.class);
                 if (graphQuery != null) {
-                    //todo if fields haas @GraphQuery which is nested class
                     GraphQueryData graphQueryData = new GraphQueryData(field.getName(), graphQuery.value(), graphQuery.classType());
-                    log.debug("Pushing to Stack Field Name: {}, GraphQuery Regex: {},  GraphQuery Type: {}", graphQueryData.getFieldName(), graphQueryData.getRegex(), graphQueryData.getClazz().getName());
+                    log.debug("Pushing to Stack Field Name: {}, GraphQuery Regex: {},  GraphQuery Type: {}",
+                            graphQueryData.getFieldName(), graphQueryData.getRegex(), graphQueryData.getClazz().getName());
                     Field[] declaredFields = graphQueryData.getClazz().getDeclaredFields();
                     String subQuery = processForClassFields(declaredFields);
                     log.debug("regex {} query{}",graphQueryData.getRegex(),subQuery);
-                    subQueryMap.put(graphQueryData.getRegex(),subQuery);
+                    String fieldName = graphQuery.value().replace("{*}"," ");
+                    subQueryMap.put(graphQueryData.getRegex(),fieldName+subQuery);
                     query+= graphQueryData.getFieldName()+"  " +subQuery;
                 } else {
                     log.debug("Field Name: {}  ", field.getName());

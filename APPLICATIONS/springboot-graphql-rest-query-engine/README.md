@@ -380,7 +380,7 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 * with regex for all employees employee{*}
 ```
 {
-    "query":"{ getAllEmployee employees{*} }" 
+    "query":"{ getAllEmployee employee{*} }" 
     ,"queryName":"getAllEmployee"
 }
 ```
@@ -388,15 +388,15 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 * with regex for all employees department{*}
 ````
 {
-    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   department{*} projects   {  projectId  name  startDate  endDate  address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  }  }" 
+    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department{*} projects   {  projectId  name  startDate  endDate  address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  }  }" 
     ,"queryName":"getAllEmployee"
 }
 ````
 
-* with regex for all employees department{*} and  projects{*}
+* with regex for all employees department{*} and  projects{*} contact{*}
 ````
 {
-    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact   contact{*} address   {  addressId  street  state  country  } department   department{*} projects  projects{*} }  }" 
+    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact{*} address {  addressId  street  state  country  } department{*} projects{*} }  }" 
     ,"queryName":"getAllEmployee"
 }
 ````
@@ -405,7 +405,7 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 
 ````
 {
-    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact   contact{*} address   address{*}  department   department{*} projects  projects{*} }  }" 
+    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact{*} address{*}  department{*} projects{*} }  }" 
     ,"queryName":"getAllEmployee"
 }
 ````
@@ -414,7 +414,7 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 ````
 
 {
-    "query":"{ getAllEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate  contact contact{*}  address  address{*}   }  } }"
+    "query":"{ getAllEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate  contact{*} address{*}   }  } }"
     ,"queryName":"getAllEmployee"
 }
 
@@ -423,7 +423,7 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 * with regex for all employees -> department  contact{*} and address{*}
 ````
 {
-    "query":"{ getAllEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name contact contact{*}  address  address{*} } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } }"
+    "query":"{ getAllEmployee {  employeeId  firstName  lastName  career contact {  contactId  type  email  phone  } address {  addressId  street  state  country  } department   {  deptId  name contact{*} address{*} } projects {  projectId  name  startDate  endDate address {  addressId  street  state  country  } contact {  contactId  type  email  phone  }  }  } }"
     ,"queryName":"getAllEmployee"
 }
 ````
@@ -431,7 +431,7 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 * with regex for all employees -> department and project  contact{*} and address{*}
 ```
 {
-    "query":"{ getAllEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name contact contact{*}  address  address{*} } projects   {  projectId  name  startDate  endDate contact contact{*}  address  address{*}  }  } }"
+    "query":"{ getAllEmployee {  employeeId  firstName  lastName  career contact {  contactId  type  email  phone  } address {  addressId  street  state  country  } department {  deptId  name contact{*}  address{*} } projects  {  projectId  name  startDate  endDate contact{*} address{*}  }  } }"
     ,"queryName":"getAllEmployee"
 }
 

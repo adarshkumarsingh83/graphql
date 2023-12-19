@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "employees")
-@GraphRootQuery(value = "employees{*}")
+@GraphRootQuery(value = "employee{*}")
 public class Employee {
 
     @Id
