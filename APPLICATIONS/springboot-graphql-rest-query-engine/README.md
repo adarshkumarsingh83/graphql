@@ -364,8 +364,13 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 }
 ```
 
+### curl query 
+```
 
-
+curl --location 'http://localhost:8080/graphql/employees' \
+--header 'Content-Type: application/json' \
+--data '[query-data-payload]'
+```
 
 ### regex query
 
