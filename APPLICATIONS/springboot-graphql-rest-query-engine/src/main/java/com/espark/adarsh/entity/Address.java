@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "addresses")
-@GraphSubQuery(value = "addresses{*}")
+@GraphSubQuery(value = "addresses{*.*}")
 public class Address {
 
     @Id

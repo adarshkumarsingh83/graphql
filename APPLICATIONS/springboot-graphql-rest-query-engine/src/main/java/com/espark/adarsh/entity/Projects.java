@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "projects")
-@GraphSubQuery(value = "projects{*}")
+@GraphSubQuery(value = "projects{*.*}")
 public class Projects implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +26,12 @@ public class Projects implements Serializable {
     @Column(name = "endDate", columnDefinition = "DATE")
     private LocalDate endDate;
 
-    @GraphQuery(value = "address{*}",classType = Address.class)
+    @GraphQuery(value = "address{*.*}",classType = Address.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", referencedColumnName = "address_id")
     Address address;
 
-    @GraphQuery(value = "contact{*}",classType = Contact.class)
+    @GraphQuery(value = "contact{*.*}",classType = Contact.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", referencedColumnName = "contact_id")
     Contact contact;

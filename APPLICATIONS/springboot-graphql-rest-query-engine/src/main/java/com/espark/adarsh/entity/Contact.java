@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "contacts")
-@GraphSubQuery(value = "contacts{*}")
+@GraphSubQuery(value = "contacts{*.*}")
 public class Contact {
 
     @Id

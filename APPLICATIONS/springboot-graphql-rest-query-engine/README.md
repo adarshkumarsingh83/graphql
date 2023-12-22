@@ -368,13 +368,46 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 * http://localhost:8080/graphql/employee/query
 ```
 {
-  "department{*}": "department  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } ",
-  "address{*}": "address  {  addressId  street  state  country  } ",
-  "contact{*}": "contact  {  contactId  type  email  phone  } ",
-  "employee{*}": " {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } ",
-  "projects{*}": "projects  {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } "
+  "contact{*.*}": "contact  {  contactId  type  email  phone  } ",
+  "department{*}": "department  {  deptId  name  }",
+  "address{*}": "address  {  addressId  street  state  country  }",
+  "employee{*.*}": " {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } ",
+  "address{*.*}": "address  {  addressId  street  state  country  } ",
+  "projects{*.*}": "projects  {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } ",
+  "contact{*}": "contact  {  contactId  type  email  phone  }",
+  "department{*.*}": "department  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } ",
+  "employee{*}": "employee  {  employeeId  firstName  lastName  career  }",
+  "projects{*}": "projects  {  projectId  name  startDate  endDate  }"
 }
 ```
+
+
+### regex query generation in logs
+
+```
+
+regex employee{*.*} query  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } 
+
+regex employee{*} query employee  {  employeeId  firstName  lastName  career  }
+
+regex department{*.*} query department  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } 
+
+regex department{*} query department  {  deptId  name  }
+
+regex projects{*.*} query projects  {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  } } 
+
+regex projects{*} query projects  {  projectId  name  startDate  endDate  }
+
+regex address{*} query address  {  addressId  street  state  country  }
+
+regex address{*.*} query address  {  addressId  street  state  country  } 
+
+regex contact{*} query contact  {  contactId  type  email  phone  }
+
+regex contact{*.*} query contact  {  contactId  type  email  phone  } 
+
+```
+
 
 ### curl query 
 ```
@@ -402,10 +435,17 @@ curl --location 'http://localhost:8080/graphql/employees' \
 }
 ```
 
+```
+{
+    "query":"{ getAllEmployee employee{*.*} }" 
+    ,"queryName":"getAllEmployee"
+}
+```
+
 * with regex for all employees department{*}
 ````
 {
-    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department{*} projects   {  projectId  name  startDate  endDate  address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  }  }" 
+    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department{*.*} projects   {  projectId  name  startDate  endDate  address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  }  }" 
     ,"queryName":"getAllEmployee"
 }
 ````
@@ -413,7 +453,7 @@ curl --location 'http://localhost:8080/graphql/employees' \
 * with regex for all employees department{*} and  projects{*} contact{*}
 ````
 {
-    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact{*} address {  addressId  street  state  country  } department{*} projects{*} }  }" 
+    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact{*} address {  addressId  street  state  country  } department{*.*} projects{*.*} }  }" 
     ,"queryName":"getAllEmployee"
 }
 ````
@@ -422,7 +462,7 @@ curl --location 'http://localhost:8080/graphql/employees' \
 
 ````
 {
-    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact{*} address{*}  department{*} projects{*} }  }" 
+    "query":"{ getAllEmployee  {  employeeId  firstName  lastName  career contact{*.*} address{*.*}  department{*.*} projects{*.*} }  }" 
     ,"queryName":"getAllEmployee"
 }
 ````
@@ -504,19 +544,3 @@ curl --location 'http://localhost:8080/graphql/employees' \
 }
 
 ```
-
-### regex query generation in logs
-
-```
- regex employees{*} query  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } 
-
- regex department{*} query  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } 
-
- regex address{*} query  {  addressId  street  state  country  } 
-
- regex contact{*} query  {  contactId  type  email  phone  } 
-
- regex projects{*} query  {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } 
-
-```
-

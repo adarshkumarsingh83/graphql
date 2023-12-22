@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "departments")
-@GraphSubQuery(value = "departments{*}")
+@GraphSubQuery(value = "departments{*.*}")
 public class Department {
 
     @Id
@@ -19,12 +19,12 @@ public class Department {
     private Long deptId;
     private String name;
 
-    @GraphQuery(value = "address{*}", classType = Address.class)
+    @GraphQuery(value = "address{*.*}", classType = Address.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id", referencedColumnName = "address_id")
     Address address;
 
-    @GraphQuery(value = "contact{*}", classType = Contact.class)
+    @GraphQuery(value = "contact{*.*}", classType = Contact.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id", referencedColumnName = "contact_id")
     Contact contact;

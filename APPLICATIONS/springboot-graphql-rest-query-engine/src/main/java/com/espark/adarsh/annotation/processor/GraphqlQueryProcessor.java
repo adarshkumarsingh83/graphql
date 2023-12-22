@@ -36,7 +36,7 @@ public class GraphqlQueryProcessor {
             final Object object = bean.getValue();
             log.info("Beans {}", object.getClass().getName());
             final Field[] fields = object.getClass().getDeclaredFields();
-            String query = processForClassFields(fields);
+            String query = processForClassFields(bean.getKey().replace(".*",""),fields);
             subQueryMap.put(bean.getKey(),query);
         }
         subQueryMap.entrySet().forEach(stringStringEntry -> {
@@ -44,8 +44,9 @@ public class GraphqlQueryProcessor {
         });
     }
 
-    public String processForClassFields(Field[] fields) {
-        String query=" { ";
+    public String processForClassFields(String rootFieldName,Field[] fields) {
+        String queryWithDepth=" { ";
+        String queryWithoutDepth=" { ";
         if (fields != null && fields.length > 0) {
             for (final Field field : fields) {
                 final GraphQuery graphQuery = field.getDeclaredAnnotation(GraphQuery.class);
@@ -54,19 +55,23 @@ public class GraphqlQueryProcessor {
                     log.debug("Pushing to Stack Field Name: {}, GraphQuery Regex: {},  GraphQuery Type: {}",
                             graphQueryData.getFieldName(), graphQueryData.getRegex(), graphQueryData.getClazz().getName());
                     Field[] declaredFields = graphQueryData.getClazz().getDeclaredFields();
-                    String subQuery = processForClassFields(declaredFields);
-                    log.debug("regex {} query{}",graphQueryData.getRegex(),subQuery);
-                    String fieldName = graphQuery.value().replace("{*}"," ");
+                    String subQuery = processForClassFields(graphQueryData.getRegex().replace(".*",""),declaredFields);
+                    log.debug("regex {} queryWithDepth{}",graphQueryData.getRegex(),subQuery);
+                    String fieldName = graphQuery.value().replace("{*.*}"," ");
                     subQueryMap.put(graphQueryData.getRegex(),fieldName+subQuery);
-                    query+= graphQueryData.getFieldName()+"  " +subQuery;
+                    queryWithDepth+= graphQueryData.getFieldName()+"  " +subQuery;
                 } else {
                     log.debug("Field Name: {}  ", field.getName());
-                    query+=" "+field.getName()+" ";
+                    queryWithDepth+=" "+field.getName()+" ";
+                    queryWithoutDepth+=" "+field.getName()+" ";
                 }
             }
+            queryWithoutDepth+=" }";
+            String fieldName = rootFieldName.replace("{*}"," ");
+            subQueryMap.put(rootFieldName,fieldName+queryWithoutDepth);
         }
 
-        return query+=" } ";
+        return queryWithDepth+=" } ";
     }
 
     @lombok.Data
