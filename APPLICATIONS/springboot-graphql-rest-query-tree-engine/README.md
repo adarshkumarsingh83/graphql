@@ -14,6 +14,34 @@
 # To Fetch Data
 * $ curl -v localhost:8080/employees
 
+### To fetch the type of query suppored by graphql implemenation
+* http://localhost:8080/graphql/employee/query
+```
+{
+  "employee{*.*}": " {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } ",
+  "employee{*}": "employee  {  employeeId  firstName  lastName  career  }",
+  "employee{*.2}": " {  employeeId  firstName  lastName  career   department  {  deptId  name   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } projects  {  projectId  name  startDate  endDate   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }   }  ",
+  "employee{*.1}": " {  employeeId  firstName  lastName  career   department  {  deptId  name  } address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } projects  {  projectId  name  startDate  endDate  } }  ",
+  "employee{*.0}": " {  employeeId  firstName  lastName  career  }"
+  
+  "projects{*.*}": " {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } ",
+  "projects{*}": "projects  {  projectId  name  startDate  endDate  }",
+  "projects{*.1}": " {  projectId  name  startDate  endDate   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }  ",
+  "projects{*.0}": " {  projectId  name  startDate  endDate  }",
+  
+  "department{*.*}": "department  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } ",
+  "department{*}": "department  {  deptId  name  }",
+  "department{*.1}": " {  deptId  name   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }  ",
+  "department{*.0}": " {  deptId  name  }",
+  
+  "address{*.*}": "address  {  addressId  street  state  country  } ",
+  "address{*}": "address  {  addressId  street  state  country  }",
+  
+  "contact{*.*}": "contact  {  contactId  type  email  phone  } ",
+  "contact{*}": "contact  {  contactId  type  email  phone  }",
+}
+```
+
 
 ### get all employee
 ```

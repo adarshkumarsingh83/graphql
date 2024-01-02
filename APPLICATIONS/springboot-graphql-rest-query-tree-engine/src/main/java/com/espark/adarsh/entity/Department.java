@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "departments")
-@GraphSubQuery(value = "departments{*.*}")
-@GraphRootQuery(value = "departments{*.*}", level = 1)
+@GraphSubQuery(value = "department{*.*}")
+@GraphRootQuery(value = "department{*.*}", level = 1)
 public class Department {
 
     @Id
