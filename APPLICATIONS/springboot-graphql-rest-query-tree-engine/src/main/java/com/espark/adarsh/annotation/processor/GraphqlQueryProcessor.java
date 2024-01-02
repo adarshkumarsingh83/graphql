@@ -122,7 +122,7 @@ public class GraphqlQueryProcessor {
 
 
 
-    String processTreeForLevel(int level, QueryNode node) {
+   private String processTreeForLevel(int level, QueryNode node) {
         if (level > 0 && node != null) {
             Map<String, QueryNode> child = node.getChild();
             if (child != null && !child.isEmpty()) {
