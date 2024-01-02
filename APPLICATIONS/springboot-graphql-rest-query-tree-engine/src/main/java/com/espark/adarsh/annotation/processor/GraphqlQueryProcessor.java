@@ -67,6 +67,7 @@ public class GraphqlQueryProcessor {
                     String fieldName = graphQuery.value().replace("{*.*}"," ");
                     subQueryMap.put(graphQueryData.getRegex(),fieldName+subQuery);
                     queryWithDepth+= graphQueryData.getFieldName()+"  " +subQuery;
+                    node.setQueryWithChild(queryWithDepth);
                     node.setChild(fieldName,root);
                 } else {
                     log.debug("Field Name: {}  ", field.getName());

@@ -8,6 +8,8 @@ public class QueryNode {
 
     boolean isRoot = false;
     String query;
+
+    String queryWithChild;
     Map<String, QueryNode> child = new HashMap<>();
 
 
@@ -21,6 +23,14 @@ public class QueryNode {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public String getQueryWithChild() {
+        return queryWithChild;
+    }
+
+    public void setQueryWithChild(String queryWithChild) {
+        this.queryWithChild = queryWithChild;
     }
 
     public void setChild(String colName, QueryNode child) {
