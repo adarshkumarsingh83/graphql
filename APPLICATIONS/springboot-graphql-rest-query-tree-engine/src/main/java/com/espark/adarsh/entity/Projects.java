@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "projects")
 @GraphSubQuery(value = "projects{*.*}")
-@GraphRootQuery(value = "projects{*.*}")
+@GraphRootQuery(value = "projects{*.*}",level = 1)
 public class Projects implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

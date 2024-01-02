@@ -43,12 +43,23 @@ public class GraphqlQueryProcessor {
             String query = processForClassFields(bean.getKey().replace(".*", ""), fields, root);
             subQueryMap.put(bean.getKey(), query);
             queryNodeTree.put(bean.getKey().replace("{*.*}", " "), root);
+            GraphRootQuery graphRootQuery =  bean.getValue().getClass().getAnnotation(GraphRootQuery.class);
+            int level = graphRootQuery.level();
+            if(level>0){
+                while(level>=0){
+                    String levelQuery = processTreeForLevel(level,root);
+                    subQueryMap.put(bean.getKey().replace(".*","."+level),levelQuery );
+                    level-=1;
+                }
+            }
         }
+
         subQueryMap.entrySet().forEach(stringStringEntry -> {
             log.info("regex {} query {}", stringStringEntry.getKey(), stringStringEntry.getValue());
         });
+
         queryNodeTree.entrySet().forEach(stringQueryNodeEntry -> System.out.println(stringQueryNodeEntry.getKey()
-                + " " + stringQueryNodeEntry.getValue()+" :=> "+processTreeForLevel(2,stringQueryNodeEntry.getValue())));
+                + " " + stringQueryNodeEntry.getValue()));
     }
 
     public String processForClassFields(String rootFieldName, Field[] fields, QueryNode node) {

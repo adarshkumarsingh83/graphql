@@ -13,4 +13,6 @@ public @interface GraphRootQuery {
 
     String value() default "";
 
+    int level() default 0;
+
 }
