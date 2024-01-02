@@ -386,25 +386,25 @@ curl --location 'http://localhost:8080/graphql/employee/10' \
 
 ```
 
-regex employee{*.*} query  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } 
-
-regex employee{*} query employee  {  employeeId  firstName  lastName  career  }
-
-regex department{*.*} query department  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } 
-
-regex department{*} query department  {  deptId  name  }
-
-regex projects{*.*} query projects  {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  } } 
-
-regex projects{*} query projects  {  projectId  name  startDate  endDate  }
-
-regex address{*} query address  {  addressId  street  state  country  }
-
-regex address{*.*} query address  {  addressId  street  state  country  } 
-
-regex contact{*} query contact  {  contactId  type  email  phone  }
-
-regex contact{*.*} query contact  {  contactId  type  email  phone  } 
+ regex contact{*.*} query contact  {  contactId  type  email  phone  } 
+ regex departments{*} query departments  {  deptId  name  }
+ regex employee{*.*} query  {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } 
+ regex projects{*.*} query  {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } 
+ regex department{*.*} query department  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } 
+ regex projects{*.0} query  {  projectId  name  startDate  endDate  }
+ regex departments{*.0} query  {  deptId  name  }
+ regex departments{*.1} query  {  deptId  name   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }  
+ regex projects{*.1} query  {  projectId  name  startDate  endDate   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }  
+ regex department{*} query department  {  deptId  name  }
+ regex departments{*.*} query  {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } 
+ regex address{*} query address  {  addressId  street  state  country  }
+ regex address{*.*} query address  {  addressId  street  state  country  } 
+ regex contact{*} query contact  {  contactId  type  email  phone  }
+ regex employee{*} query employee  {  employeeId  firstName  lastName  career  }
+ regex employee{*.1} query  {  employeeId  firstName  lastName  career   department  {  deptId  name  } address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } projects  {  projectId  name  startDate  endDate  } }  
+ regex projects{*} query projects  {  projectId  name  startDate  endDate  }
+ regex employee{*.2} query  {  employeeId  firstName  lastName  career   department  {  deptId  name   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } projects  {  projectId  name  startDate  endDate   address  {  addressId  street  state  country  } contact  {  contactId  type  email  phone  } }   }  
+ regex employee{*.0} query  {  employeeId  firstName  lastName  career  }
 
 ```
 
