@@ -42,13 +42,52 @@
 }
 ```
 
+### example
+```
+curl --location 'http://localhost:8080/graphql/employees' \
+--header 'Content-Type: application/json' \
+--data '{
+    "query":"{ getAllEmployee  employee{*.*} }" 
+    ,"queryName":"getAllEmployee"
+}'
+
+curl --location 'http://localhost:8080/graphql/employees' \
+--header 'Content-Type: application/json' \
+--data '{
+    "query":"{ getAllEmployee  employee{*} }" 
+    ,"queryName":"getAllEmployee"
+}'
+
+curl --location 'http://localhost:8080/graphql/employees' \
+--header 'Content-Type: application/json' \
+--data '{
+    "query":"{ getAllEmployee  employee{*.2} }" 
+    ,"queryName":"getAllEmployee"
+}'
+
+curl --location 'http://localhost:8080/graphql/employees' \
+--header 'Content-Type: application/json' \
+--data '{
+    "query":"{ getAllEmployee  employee{*.1} }" 
+    ,"queryName":"getAllEmployee"
+}'
+
+curl --location 'http://localhost:8080/graphql/employees' \
+--header 'Content-Type: application/json' \
+--data '{
+    "query":"{ getAllEmployee  employee{*.0} }" 
+    ,"queryName":"getAllEmployee"
+}'
+```
+
+
 
 ### get all employee
 ```
 curl --location 'http://localhost:8080/graphql/employees' \
 --header 'Content-Type: application/json' \
 --data '{
-    "query":"{getAllEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } }"
+    "query":"{ getAllEmployee {  employeeId  firstName  lastName  career contact   {  contactId  type  email  phone  } address   {  addressId  street  state  country  } department   {  deptId  name address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  } projects   {  projectId  name  startDate  endDate address   {  addressId  street  state  country  } contact   {  contactId  type  email  phone  }  }  } }"
     ,"queryName":"getAllEmployee"
 }'
 ```
