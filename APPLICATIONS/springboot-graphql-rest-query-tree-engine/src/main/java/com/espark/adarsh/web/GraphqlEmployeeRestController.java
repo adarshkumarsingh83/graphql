@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,11 @@ public class GraphqlEmployeeRestController {
 
     @GetMapping("/graphql/employee/query")
     public Map<String,String> getQuery(){
-        return graphqlQueryProcessor.getSubQueryMap();
+        Map<String, String> result = new LinkedHashMap<>();
+         graphqlQueryProcessor.getSubQueryMap().entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
+                return result;
     }
 
 }

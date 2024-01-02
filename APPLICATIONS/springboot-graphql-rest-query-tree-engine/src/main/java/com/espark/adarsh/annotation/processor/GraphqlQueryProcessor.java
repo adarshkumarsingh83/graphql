@@ -20,6 +20,9 @@ import java.util.Map;
 public class GraphqlQueryProcessor {
 
 
+    final static String DOUBLE_START="{*.*}";
+    final static String SINGLE_START="{*.*}";
+
     @Autowired
     private ConfigurableApplicationContext context;
 
@@ -40,15 +43,15 @@ public class GraphqlQueryProcessor {
             log.info("Beans {}", object.getClass().getName());
             final Field[] fields = object.getClass().getDeclaredFields();
             QueryNode root = new QueryNode(true);
-            String query = processForClassFields(bean.getKey().replace(".*", ""), fields, root);
-            subQueryMap.put(bean.getKey(), query);
-            queryNodeTree.put(bean.getKey().replace("{*.*}", " "), root);
+            String query = processForClassFields(bean.getKey(), fields, root);
+            subQueryMap.put(bean.getKey()+"{*.*}", query);
+            queryNodeTree.put(bean.getKey(), root);
             GraphRootQuery graphRootQuery =  bean.getValue().getClass().getAnnotation(GraphRootQuery.class);
             int level = graphRootQuery.level();
             if(level>0){
                 while(level>=0){
                     String levelQuery = processTreeForLevel(level,root);
-                    subQueryMap.put(bean.getKey().replace(".*","."+level),levelQuery );
+                    subQueryMap.put(bean.getKey()+"{*."+level+"}",levelQuery );
                     level-=1;
                 }
             }
@@ -74,13 +77,13 @@ public class GraphqlQueryProcessor {
                             graphQueryData.getFieldName(), graphQueryData.getRegex(), graphQueryData.getClazz().getName());
                     Field[] declaredFields = graphQueryData.getClazz().getDeclaredFields();
                     QueryNode root = new QueryNode(false);
-                    String subQuery = processForClassFields(graphQueryData.getRegex().replace(".*", ""), declaredFields, root);
+                    String subQuery = processForClassFields(graphQueryData.getRegex(), declaredFields, root);
                     log.debug("regex {} queryWithDepth{}", graphQueryData.getRegex(), subQuery);
-                    String fieldName = graphQuery.value().replace("{*.*}", " ");
-                    subQueryMap.put(graphQueryData.getRegex(), fieldName + subQuery);
+
+                    subQueryMap.put(graphQueryData.getRegex()+"{*.*}", graphQuery.value() + subQuery);
                     queryWithDepth += graphQueryData.getFieldName() + "  " + subQuery;
                     node.setQueryWithChild(queryWithDepth);
-                    node.setChild(fieldName, root);
+                    node.setChild(graphQuery.value(), root);
                 } else {
                     log.debug("Field Name: {}  ", field.getName());
                     queryWithDepth += " " + field.getName() + " ";
@@ -88,12 +91,11 @@ public class GraphqlQueryProcessor {
                 }
             }
             queryWithoutDepth += " }";
-            String fieldName = rootFieldName.replace("{*}", " ");
-            subQueryMap.put(rootFieldName, fieldName + queryWithoutDepth);
+            subQueryMap.put(rootFieldName+"{*}", rootFieldName + queryWithoutDepth);
             if (node.isRoot()) {
                 node.setQuery(queryWithoutDepth);
             } else {
-                node.setQuery(fieldName + queryWithoutDepth);
+                node.setQuery(rootFieldName + queryWithoutDepth);
             }
         }
         return queryWithDepth += " } ";
