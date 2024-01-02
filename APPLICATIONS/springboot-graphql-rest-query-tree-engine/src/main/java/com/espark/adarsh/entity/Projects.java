@@ -1,5 +1,6 @@
 package com.espark.adarsh.entity;
 
+import com.espark.adarsh.annotation.GraphRootQuery;
 import com.espark.adarsh.annotation.GraphSubQuery;
 import com.espark.adarsh.annotation.GraphQuery;
 import jakarta.persistence.*;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "projects")
 @GraphSubQuery(value = "projects{*.*}")
+@GraphRootQuery(value = "projects{*.*}")
 public class Projects implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

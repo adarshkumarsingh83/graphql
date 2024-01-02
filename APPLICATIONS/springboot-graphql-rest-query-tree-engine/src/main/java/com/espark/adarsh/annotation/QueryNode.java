@@ -52,6 +52,10 @@ public class QueryNode {
         return null;
     }
 
+    public Map<String, QueryNode> getChild() {
+        return child;
+    }
+
     @Override
     public String toString() {
         return "QueryNode{" +
