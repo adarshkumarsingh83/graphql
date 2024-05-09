@@ -1,7 +1,6 @@
 package com.espark.adarsh.entity;
 
 
-import com.espark.adarsh.annotation.GraphSubQuery;
 import com.espark.adarsh.annotation.GraphQuery;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +9,6 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "departments")
-@GraphSubQuery(value = "departments{*.*}")
 public class Department {
 
     @Id
